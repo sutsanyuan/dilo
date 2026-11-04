@@ -178,3 +178,11 @@
   background: var(--color-surface);
   border-radius: var(--radius-md);
 }
+
+.mock {
+  padding: var(--space-12) var(--space-16);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+  color: var(--color-ink-secondary);
+  font-size: 13px;
+}

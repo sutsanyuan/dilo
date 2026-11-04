@@ -62,6 +62,7 @@ export default function TryPage() {
   const [result, setResult] = useState<ConvertResponse | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState<"live" | "mock" | null>(null);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- 只在載入時讀一次瀏覽器儲存
@@ -78,6 +79,8 @@ export default function TryPage() {
         body: JSON.stringify({ session, user_text: text, written_at: nowWithOffset(), people: peopleToUse }),
       });
       const data = await res.json();
+      const m = res.headers.get("x-dilo-ai-mode");
+      if (m === "live" || m === "mock") setMode(m);
       if (!res.ok) throw new Error(data.error ?? "發生錯誤");
       setResult(data as ConvertResponse);
     } catch (e) {
@@ -137,6 +140,12 @@ export default function TryPage() {
       </button>
 
       {error && <p className={styles.error}>{error}</p>}
+
+      {mode === "mock" && (
+        <p className={styles.mock}>
+          模擬模式：還沒設定 API 金鑰，顯示的是範例結果，不會花費額度。早上和晚上各有一組範例。
+        </p>
+      )}
 
       {people.length > 0 && (
         <section className={styles.people}>

@@ -73,4 +73,14 @@ LINE Seed TW 加入步驟：
 - API：`POST /api/convert`（`src/app/api/convert/route.ts`）
 - 測試頁：http://localhost:3000/try ，輸入句子看 AI 的轉換結果；遇到新人物會詢問性別，答案存在瀏覽器裡
 
+### 模擬模式（還沒儲值也能開發）
+
+沒有設定 `ANTHROPIC_API_KEY` 時，`/api/convert` 會自動進入**模擬模式**：不呼叫 Claude，改回傳 `src/lib/ai/examples/` 的範例資料（早上一組、晚上一組），並延遲約一秒模擬思考。人物問答也會模擬：回答過的人不會再被問。
+
+- 判斷邏輯：`src/lib/ai/mode.ts`；範例回傳：`src/lib/ai/mock.ts`
+- 想在有金鑰時也用模擬模式（例如作品集的展示模式），在 `.env.local` 設 `AI_MODE=mock`
+- API 回應的 `x-dilo-ai-mode` 標頭會是 `live` 或 `mock`
+
+額度用完、超過花費上限、金鑰錯誤時，API 會回傳清楚的中文訊息（見 `convert.ts` 的 `toConvertError`）。
+
 > 目前 `/api/convert` 沒有登入保護，部署到公開網址前要先加上，否則任何人都能用掉你的 API 額度。

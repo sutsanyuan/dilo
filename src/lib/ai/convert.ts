@@ -1,12 +1,15 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { jsonSchemaOutputFormat } from "@anthropic-ai/sdk/helpers/json-schema";
 import { CONVERT_SYSTEM_PROMPT } from "./convert-prompt";
+import { mockConvert } from "./mock";
+import { getAiMode } from "./mode";
 import responseSchemaFile from "./schemas/response.schema.json";
 import type { ConvertInput, ConvertResponse } from "./types";
 
 /**
- * 呼叫 Claude，把使用者的一段話轉成西文句塊。
+ * 把使用者的一段話轉成西文句塊。
  * 只在伺服器端執行（API 金鑰不能出現在瀏覽器）。
+ * 模擬模式下改用 mock.ts 的範例資料（見 mode.ts）。
  */
 
 // 預設用 Sonnet 5.5：速度和品質的平衡最好。想換模型時在 .env.local 設定 CLAUDE_MODEL。
@@ -16,21 +19,38 @@ const MODEL = process.env.CLAUDE_MODEL ?? "claude-sonnet-5-5";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { $schema, title, description, ...responseSchema } = responseSchemaFile;
 
-const client = new Anthropic(); // 自動讀取環境變數 ANTHROPIC_API_KEY
+// 第一次真的要呼叫時才建立，模擬模式完全不會碰到 API
+let client: Anthropic | null = null;
+const getClient = () => (client ??= new Anthropic()); // 自動讀取環境變數 ANTHROPIC_API_KEY
 
-export class ConvertError extends Error {}
+/** 可以直接顯示給使用者看的錯誤 */
+export class ConvertError extends Error {
+  constructor(
+    message: string,
+    public status = 422,
+  ) {
+    super(message);
+  }
+}
 
 export async function convertSentence(input: ConvertInput): Promise<ConvertResponse> {
-  const message = await client.messages.parse({
-    model: MODEL,
-    max_tokens: 4096,
-    system: CONVERT_SYSTEM_PROMPT,
-    messages: [{ role: "user", content: JSON.stringify(input) }],
-    output_config: {
-      // 強制 AI 回傳符合 response.schema.json 的格式
-      format: jsonSchemaOutputFormat(responseSchema as { type: "object" }),
-    },
-  });
+  if (getAiMode() === "mock") return mockConvert(input);
+
+  let message;
+  try {
+    message = await getClient().messages.parse({
+      model: MODEL,
+      max_tokens: 4096,
+      system: CONVERT_SYSTEM_PROMPT,
+      messages: [{ role: "user", content: JSON.stringify(input) }],
+      output_config: {
+        // 強制 AI 回傳符合 response.schema.json 的格式
+        format: jsonSchemaOutputFormat(responseSchema as { type: "object" }),
+      },
+    });
+  } catch (error) {
+    throw toConvertError(error);
+  }
 
   if (message.stop_reason === "refusal") {
     throw new ConvertError("AI 沒有處理這段內容，請換個說法再試一次。");
@@ -43,6 +63,32 @@ export async function convertSentence(input: ConvertInput): Promise<ConvertRespo
   }
 
   return normalize(message.parsed_output as unknown as ConvertResponse);
+}
+
+/**
+ * 把 API 的錯誤翻成看得懂的中文。
+ * 額度用完、超過花費上限、金鑰錯誤是上線後最可能遇到的三種狀況。
+ */
+function toConvertError(error: unknown): ConvertError | unknown {
+  if (!(error instanceof Anthropic.APIError)) return error;
+  const text = String(error.message).toLowerCase();
+
+  if (error.status === 401) {
+    return new ConvertError("API 金鑰不正確，請檢查 .env.local 的 ANTHROPIC_API_KEY。", 500);
+  }
+  if (text.includes("credit balance")) {
+    return new ConvertError("AI 額度用完了，請到 Claude Console 儲值後再試。", 503);
+  }
+  if (text.includes("usage limit") || text.includes("spend_limit") || text.includes("spend limit")) {
+    return new ConvertError("已經達到這個月設定的 AI 花費上限，可以到 Claude Console 調整上限。", 503);
+  }
+  if (error.status === 429) {
+    return new ConvertError("AI 暫時太忙了，等一下再試。", 429);
+  }
+  if (error.status === 529 || (error.status ?? 0) >= 500) {
+    return new ConvertError("AI 服務暫時有問題，等一下再試。", 503);
+  }
+  return error;
 }
 
 /**
