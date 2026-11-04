@@ -1,0 +1,575 @@
+<title>Dilo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one phone-width column, a quiet paper ground, Spanish set in Newsreader as the page's one voice. Bottom tabs on the three home views; flow screens (input, confirm, practice) take the full column. */
+:root{
+  --bg:#faf7f2; --surface:#ffffff; --muted:#f2ece3; --ink:#1f1b16; --ink-2:#6e665c; --line:#e8e1d6;
+  --accent:#d9512c; --accent-strong:#c4441f; --accent-tint:#fbe4db; --on-accent:#ffffff;
+  --stuck:#a26408; --stuck-tint:#f7ebd3; --ok:#46704f; --ok-tint:#e2ede4;
+  --ui:"Plus Jakarta Sans","LINE Seed JP","PingFang TC","Noto Sans TC",system-ui,sans-serif;
+  --es:"Newsreader",Georgia,"Times New Roman",serif;
+  --s4:4px; --s8:8px; --s12:12px; --s16:16px; --s20:20px; --s24:24px; --s32:32px; --s48:48px;
+  --r-md:12px; --r-lg:20px; --r-pill:999px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#191613; --surface:#221e1a; --muted:#2c2722; --ink:#f2ece3; --ink-2:#b3a898; --line:#38312a;
+  --accent:#ea7a56; --accent-strong:#ef8a66; --accent-tint:#3a241b; --on-accent:#1a1410;
+  --stuck:#e3a640; --stuck-tint:#372b16; --ok:#86b893; --ok-tint:#1e2d22; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#191613; --surface:#221e1a; --muted:#2c2722; --ink:#f2ece3; --ink-2:#b3a898; --line:#38312a;
+  --accent:#ea7a56; --accent-strong:#ef8a66; --accent-tint:#3a241b; --on-accent:#1a1410;
+  --stuck:#e3a640; --stuck-tint:#372b16; --ok:#86b893; --ok-tint:#1e2d22; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+.es{font-family:var(--es);font-weight:400;line-height:1.25;letter-spacing:-.005em}
+
+.app{max-width:480px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:var(--s32) calc(104px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:var(--s16)}
+.app.flow{padding-block:var(--s20) calc(32px + env(safe-area-inset-bottom,0px))}
+
+/* text roles */
+.eyebrow{font-size:13px;font-weight:500;color:var(--ink-2)}
+.title{font-size:24px;font-weight:700;line-height:1.3;text-wrap:balance}
+.sub{font-size:14px;color:var(--ink-2)}
+.tiny{font-size:12px;color:var(--ink-2)}
+.greet{font-family:var(--es);font-style:italic;font-size:38px;line-height:1.1;letter-spacing:-.01em;text-wrap:balance}
+
+/* surfaces */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s20);display:flex;flex-direction:column;gap:var(--s12)}
+.card.hero{background:var(--accent-tint);border-color:transparent}
+.card.done{border-style:dashed}
+.between{display:flex;align-items:center;justify-content:space-between;gap:var(--s12)}
+.row{display:flex;align-items:center;gap:var(--s8)}
+.wrap{flex-wrap:wrap}
+.stack{display:flex;flex-direction:column;gap:var(--s8)}
+.grow{flex:1;min-width:0}
+
+/* chips & buttons */
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 12px;border-radius:var(--r-pill);background:var(--muted);color:var(--ink-2);font-size:13px;white-space:nowrap;border:0}
+.chip.accent{background:var(--accent-tint);color:var(--accent-strong)}
+.chip.ok{background:var(--ok-tint);color:var(--ok)}
+.chip.stuck{background:var(--stuck-tint);color:var(--stuck)}
+button.chip{cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s8);padding:14px var(--s20);border-radius:var(--r-pill);border:0;background:var(--accent-strong);color:var(--on-accent);font-weight:600;font-size:16px;width:100%}
+.btn.secondary{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn.small{width:auto;padding:8px 16px;font-size:14px}
+.btn:disabled{opacity:.5;cursor:default}
+.link{background:none;border:0;padding:0;color:var(--accent-strong);font-weight:600;font-size:14px}
+.back{background:none;border:0;padding:4px 0;display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:600;color:var(--ink)}
+.play{flex:none;display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.play svg{width:16px;height:16px}
+
+/* input */
+textarea.field{width:100%;min-height:150px;resize:vertical;padding:var(--s16);border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);font-size:16px;line-height:1.6}
+textarea.field::placeholder{color:var(--ink-2)}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:var(--s16);display:flex;flex-direction:column;gap:var(--s8)}
+
+/* results */
+.chunk{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s20);display:flex;flex-direction:column;gap:var(--s8)}
+.chunk.rec{background:var(--accent-tint);border-color:transparent}
+.chunk .simple{font-size:26px}
+.chunk .natural{font-size:17px;color:var(--ink-2)}
+.tense{font-size:13px;color:var(--ink)}
+.tense b{font-weight:600;color:var(--accent-strong)}
+.notes{display:flex;flex-wrap:wrap;gap:var(--s8)}
+.notes .chip{white-space:normal;text-align:left}
+.notes .chip .es{font-size:14px;color:var(--ink)}
+.question{background:var(--stuck-tint);border-radius:var(--r-md);padding:var(--s16);display:flex;flex-direction:column;gap:var(--s12)}
+.thinking{display:flex;align-items:center;gap:var(--s12)}
+.dots{display:inline-flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 1.2s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes pulse{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.error{background:var(--accent-tint);color:var(--ink);border-radius:var(--r-md);padding:var(--s12) var(--s16);font-size:14px}
+
+/* practice */
+.progress{height:4px;border-radius:2px;background:var(--muted);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent-strong);border-radius:2px}
+.prompt{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s32) var(--s20);text-align:center;display:flex;flex-direction:column;gap:var(--s8)}
+.prompt .zh{font-size:24px;font-weight:700;line-height:1.4;text-wrap:balance}
+.hidden-answer{border:1.5px dashed var(--line);border-radius:var(--r-lg);min-height:120px;display:grid;place-items:center;color:var(--ink-2);font-size:14px;padding:var(--s16);text-align:center}
+.answer{background:var(--surface);border:2px solid var(--ink);border-radius:var(--r-lg);padding:var(--s20);display:flex;flex-direction:column;gap:var(--s12)}
+.answer .simple{font-size:30px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--s12)}
+
+/* library */
+.item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:14px var(--s16);display:flex;flex-direction:column;gap:var(--s8);text-align:left;width:100%}
+.item .es{font-size:19px}
+.item .detail{display:flex;flex-direction:column;gap:var(--s8);padding-top:var(--s8);border-top:1px solid var(--line)}
+.filters{display:flex;gap:var(--s8);overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.empty{text-align:center;padding:var(--s32) var(--s20);display:flex;flex-direction:column;gap:var(--s8);align-items:center}
+.empty .es{font-size:22px;color:var(--accent-strong)}
+.phrase{display:flex;align-items:center;gap:var(--s12);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:var(--s12) var(--s16)}
+.phrase .es{font-size:19px}
+.reacts{display:flex;flex-wrap:wrap;gap:var(--s8)}
+.reacts button{border:1px solid var(--line);background:var(--surface);border-radius:var(--r-pill);padding:6px 14px;display:inline-flex;gap:6px;align-items:baseline}
+.reacts .es{font-size:18px}
+.section-title{font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--ink-2);margin-top:var(--s8)}
+
+/* tabs */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+nav.tabs .in{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+nav.tabs button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0 2px;font-size:12px;color:var(--ink-2)}
+nav.tabs svg{width:22px;height:22px}
+nav.tabs button[aria-current="page"]{color:var(--accent-strong);font-weight:600}
+.status{font-size:11px;color:var(--ink-2);text-align:center}
+@media (prefers-reduced-motion: reduce){.dots i{animation:none;opacity:1}}
+</style>
+
+<main class="app" id="app" aria-live="polite"></main>
+<nav class="tabs" id="tabs" aria-label="主要分頁"></nav>
+
+<script>
+/* ================= AI 指令（與 Next.js 版 src/lib/ai/convert-prompt.ts 相同） ================= */
+const PROMPT = "你是一位西班牙西文的口說教練，服務對象是母語為繁體中文、西文程度約 A2～B1 的學習者。學習者的目標是在和西班牙人視訊時，能把自己生活中的事說出口。\n\n你會收到一段 JSON，裡面有學習者寫的一段話（`user_text`），可能是中文、英文、寫錯的西文，或混在一起。請把它轉成學習者能理解、也能練習說出口的西文，並**只回傳符合指定格式的 JSON**，不要有任何其他文字。\n\n### 1. 語言與地區\n\n- 一律使用**西班牙本地的西文（es-ES）**，不要用拉丁美洲的說法。\n  - 例：室友 → compañero/a de piso（不是 compañero de cuarto）；你們 → vosotros（不是 ustedes）；電腦 → ordenador。\n- 所有給學習者看的說明（`meaning_zh`、`why_zh`、`zh` 等欄位）用**繁體中文**，簡短、口語，不用文法術語堆疊。\n\n### 2. 時態判斷（最重要）\n\n依照**內容講的是什麼時候**，對照 `written_at`（寫下的時間）和 `session`（早上計畫或晚上回顧）決定時態：\n\n| 內容的時間 | 時態 | 例子 |\n| --- | --- | --- |\n| 今天打算要做的事 | ir a + 原形動詞 | Hoy voy a trabajar en casa. |\n| 今天已經做的事（含今天早上、今天中午） | 現在完成式 pretérito perfecto | Hoy he trabajado mucho. |\n| 昨天或更早、已結束的時間點 | 簡單過去式 pretérito indefinido | Ayer fui al gimnasio. |\n| 過去「本來想要、打算」 | 未完成過去式 pretérito imperfecto | Quería ir pronto al gimnasio. |\n\n- 如果使用者寫「昨天」但 `written_at` 顯示其實是當天晚上寫的（例如寫成「昨天：今天我…」），以內容裡的「今天」為準，視為當天。\n- 在 `tense.why_zh` 用一句話說明為什麼用這個時態。\n- 簡單版盡量只用**一個時態**；自然版可以用到需要的時態。\n\n### 3. 拆成句塊\n\n- 把輸入拆成數個**句塊（chunk）**，每個句塊是一個能單獨說出口的意思，最多 6 個。\n- 不要合併成一個長句，也不要補上輸入裡沒有的內容。\n- 每個句塊標上它屬於哪一種對話動作 `conversation_action`：\n  - `say_today`：說自己做了或要做什麼\n  - `say_place`：說我們在哪裡、和誰在一起\n  - `ask_other`：問對方\n  - `react`：對別人的話做出反應\n\n### 4. 兩個版本\n\n每個句塊都要有：\n\n- `natural`（自然版）：母語者會說的自然說法，可以有慣用語（例：me he quedado viendo la tele）。\n- `simple`（簡單版）：讓學習者能在視訊中脫口而出的版本。\n  - 每句最多約 10 個字，避免從屬子句。\n  - 使用高頻詞彙，盡量只用一個時態。\n  - 必須文法正確，不能為了簡單而寫錯。\n\n### 5. 練習推薦\n\n- 從句塊中挑出 **1～2 個**最值得練習的，放在 `recommended_for_practice`。\n- 優先挑：視訊時最可能被問到、最能重複使用的句型（例：今天做了什麼、等一下要做什麼）。\n- 每個句塊給 `practice_priority`：1（最優先）到 3（可跳過）。\n\n### 6. 人物\n\n- `people` 是學習者已經設定過的人物清單，裡面有中文稱呼、西文說法和性別。遇到這些人時，**一律照清單的說法**。\n- 遇到清單裡沒有的人，而且西文需要知道性別或關係時（例：朋友、室友、同事）：\n  1. 先用陽性形式寫出句子，讓畫面可以先顯示。\n  2. 在 `questions` 加一題，問學習者這個人的性別，`options` 給出兩種西文說法。\n  3. 在 `new_people` 加入這個人，`gender` 填 `unknown`。\n- 不要自行猜測性別。\n\n### 7. 文化詞\n\n- 遇到台灣或亞洲特有的食物、地點、習俗（例：涮涮鍋、夜市、便當），在句子中保留通用的說法（例：shabu-shabu）。\n- 在 `culture_explanations` 附上一句**向西班牙人解釋**的簡單西文（例：Es como una fondue de caldo asiática.）和中文意思。\n\n### 8. 使用者寫了西文時\n\n- 如果 `user_text` 裡有西文，在 `corrections` 列出需要修正的地方：原本的寫法、修正後的寫法、一句中文說明。\n- 語氣友善，只說「這樣說會更自然／正確」，不要用「錯誤」這類字眼。\n- 寫對的部分不需要列出。\n\n### 9. 註解\n\n- 每個句塊的 `notes` 最多 3 則，挑學習者最可能不會的：新單字、西班牙特有說法、句型。\n- `type` 只能是 `vocab`、`grammar`、`spain_usage`、`culture` 其中之一。\n\n### 10. 不要做的事\n\n- 不要回傳 JSON 以外的任何文字。\n- 不要加入使用者沒說的事實、心情或細節。\n- 不要使用拉丁美洲說法。\n- 不要把多個句塊合成一個段落。";
+const FORMAT = `回傳格式：只回傳下面這個 JSON 物件，欄位都要有（沒有內容就給空陣列）。
+{"input_language":"zh|en|es|mixed","time_reference":"plan_today|today|yesterday_or_before|mixed",
+"chunks":[{"id":"c1","source":"對應的原文","natural":"自然版","simple":"簡單版","meaning_zh":"中文意思",
+"conversation_action":"say_today|say_place|ask_other|react",
+"tense":{"name":"ir_a_infinitivo|preterito_perfecto|preterito_indefinido|preterito_imperfecto|presente","why_zh":"一句話說明"},
+"notes":[{"type":"vocab|grammar|spain_usage|culture","es":"西文","zh":"中文說明"}],"practice_priority":1}],
+"recommended_for_practice":["c1"],
+"corrections":[{"original":"","corrected":"","why_zh":""}],
+"questions":[{"id":"q1","about":"person_gender","person_label_zh":"朋友","question_zh":"……是男生還是女生？","options":[{"label_zh":"男生","es":"un amigo","gender":"m"},{"label_zh":"女生","es":"una amiga","gender":"f"}]}],
+"new_people":[{"label_zh":"","es":"","gender":"f|m|unknown"}],
+"culture_explanations":[{"term_zh":"","es":"","explain_es":"","explain_zh":""}]}`;
+
+/* ================= constants ================= */
+const ACTIONS = { say_today: "說今天", say_place: "說地點", ask_other: "問對方", react: "反應" };
+const TENSES = { ir_a_infinitivo: "ir a + 原形動詞", preterito_perfecto: "現在完成式", preterito_indefinido: "簡單過去式", preterito_imperfecto: "未完成過去式", presente: "現在式" };
+const STATUS = { new: ["新句子", ""], ok: ["說得出來", "ok"], stuck: ["卡住了", "stuck"] };
+const RESCUE = [
+  ["¿Me lo puedes repetir más despacio?", "可以說慢一點再說一次嗎？"],
+  ["No lo he entendido, perdona.", "不好意思，我沒聽懂。"],
+  ["¿Cómo se dice … en español?", "……用西文怎麼說？"],
+];
+const REACTS = [["¡Qué bien!", "太好了"], ["¡Qué guay!", "好酷"], ["¡Qué pena!", "好可惜"], ["¿En serio?", "真的嗎？"], ["Me alegro.", "真替你高興"], ["¡Qué rico!", "看起來好好吃"]];
+const LOCAL_KEY = "dilo.v1";
+
+/* ================= helpers ================= */
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pad = n => String(n).padStart(2, "0");
+const dayKey = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+function nowWithOffset() {
+  const d = new Date(), o = -d.getTimezoneOffset(), sign = o >= 0 ? "+" : "-";
+  return `${dayKey(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}${sign}${pad(Math.floor(Math.abs(o) / 60))}:${pad(Math.abs(o) % 60)}`;
+}
+const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+const ICON = {
+  play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>',
+  today: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></svg>',
+  library: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h10a3 3 0 0 1 3 3v12H8a3 3 0 0 1-3-3z"/><path d="M5 16.5a3 3 0 0 1 3-3h10M9 8h5"/></svg>',
+  review: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="12" height="12" rx="3"/><path d="m15.5 10.5 5-3v9l-5-3"/></svg>',
+};
+
+/* ================= storage: claude db when available, this browser otherwise ================= */
+let data = { profile: { people: [], days: {} }, sentences: [] };
+const Store = {
+  mode: "local", profileRef: null, sentCol: null, chain: Promise.resolve(),
+  async init() {
+    try {
+      const raw = localStorage.getItem(LOCAL_KEY);
+      if (raw) { const d = JSON.parse(raw); if (d && d.profile) data = { profile: { people: d.profile.people || [], days: d.profile.days || {} }, sentences: d.sentences || [] }; }
+    } catch (e) {}
+    try {
+      if (!window.claude || !claude.use) return;
+      const [db, user] = await Promise.all([claude.use("db"), claude.use("user")]);
+      if (!db || !user) return;
+      const id = await user.id(); if (!id) return;
+      this.profileRef = db.doc("data/users/" + id + "/profile");
+      this.sentCol = this.profileRef.collection("sentences");
+      const [p, s] = await Promise.all([this.profileRef.get(), this.sentCol.orderBy("createdAt", "desc").limit(1000).get()]);
+      if (p.exists) { const v = p.data(); data.profile = { people: v.people || [], days: v.days || {} }; }
+      data.sentences = s.docs.map(d => ({ ...d.data(), id: d.id }));
+      this.mode = "cloud";
+      try { const n = (await user.me()).name; if (n) S.name = n.trim().split(/\s+/)[0]; } catch (e) {}
+    } catch (e) { this.mode = "local"; this.profileRef = null; this.sentCol = null; }
+  },
+  local() { try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); } catch (e) {} },
+  queue(fn) { this.chain = this.chain.then(fn).catch(() => { S.saveErr = "剛才的變更沒有存到雲端，重新整理前請先確認網路。"; render(); }); return this.chain; },
+  saveProfile() {
+    this.local();
+    if (!this.profileRef) return;
+    const body = JSON.parse(JSON.stringify(data.profile));
+    return this.queue(() => this.profileRef.set(body));
+  },
+  addSentence(s) {
+    data.sentences.unshift(s); this.local();
+    if (!this.sentCol) return;
+    const { id, ...body } = s;
+    return this.queue(() => this.sentCol.doc(id).set(body));
+  },
+  updateSentence(id, patch) {
+    const s = data.sentences.find(x => x.id === id); if (!s) return;
+    Object.assign(s, patch); this.local();
+    if (!this.sentCol) return;
+    return this.queue(() => this.sentCol.doc(id).update(patch));
+  },
+  deleteSentence(id) {
+    data.sentences = data.sentences.filter(x => x.id !== id); this.local();
+    if (!this.sentCol) return;
+    return this.queue(() => this.sentCol.doc(id).delete());
+  },
+};
+
+/* ================= Claude ================= */
+let samplePromise = null;
+const getSample = () => samplePromise || (samplePromise = (window.claude && claude.use) ? claude.use("sample").catch(() => null) : Promise.resolve(null));
+
+function errorText(e) {
+  switch (e && e.code) {
+    case "cancelled": return "";
+    case "not_granted": case "sampling_disabled": case "not_declared": case "capability_disabled": case "capability_removed":
+      S.aiOff = true; return "這裡沒辦法使用 Claude。請在 claude.ai 登入後打開這個頁面，並允許它使用 Claude。";
+    case "rate_limited": return "Claude 的使用量暫時用完了，晚一點再試試。";
+    case "session_expired": return "請重新登入 Claude 後再試。";
+    case "invalid_json": case "empty_completion": return "這次回傳的格式不完整，請再按一次轉換。";
+    case "refused": return "Claude 沒有處理這段內容，換個說法再試一次。";
+    case "prompt_too_large": return "內容太長了，請分成幾段輸入。";
+    default: return "連線出了點問題，請再試一次。";
+  }
+}
+
+function normalizeResult(r) {
+  const arr = v => Array.isArray(v) ? v : [];
+  const chunks = arr(r && r.chunks).filter(c => c && c.simple && c.meaning_zh).slice(0, 6).map((c, i) => ({
+    id: String(c.id || "c" + (i + 1)), source: String(c.source || ""), natural: String(c.natural || c.simple), simple: String(c.simple),
+    meaning_zh: String(c.meaning_zh), conversation_action: ACTIONS[c.conversation_action] ? c.conversation_action : "say_today",
+    tense: { name: String((c.tense && c.tense.name) || ""), why_zh: String((c.tense && c.tense.why_zh) || "") },
+    notes: arr(c.notes).filter(n => n && n.es).slice(0, 3).map(n => ({ type: String(n.type || "vocab"), es: String(n.es), zh: String(n.zh || "") })),
+    practice_priority: [1, 2, 3].includes(+c.practice_priority) ? +c.practice_priority : 2,
+  }));
+  if (!chunks.length) return null;
+  const ids = new Set(chunks.map(c => c.id));
+  let rec = arr(r.recommended_for_practice).map(String).filter(id => ids.has(id)).slice(0, 2);
+  if (!rec.length) rec = [[...chunks].sort((a, b) => a.practice_priority - b.practice_priority)[0].id];
+  return {
+    chunks, recommended: rec,
+    corrections: arr(r.corrections).filter(c => c && c.corrected),
+    questions: arr(r.questions).filter(q => q && Array.isArray(q.options) && q.options.length >= 2).slice(0, 2),
+    culture: arr(r.culture_explanations).filter(c => c && c.explain_es),
+  };
+}
+
+async function convert() {
+  const text = S.text.trim(); if (!text || S.busy) return;
+  const sample = await getSample();
+  if (!sample) { S.aiOff = true; S.err = errorText({ code: "not_granted" }); render(); return; }
+  const input = {
+    target_language: "es-ES", mode: "breakthrough", session: S.session, written_at: nowWithOffset(), user_text: text,
+    people: data.profile.people,
+  };
+  if (S.session === "evening") {
+    const plan = morningPlan();
+    if (plan.length) input.morning_plan = plan.map(p => ({ es: p.simple, status: S.planStatus[p.id] || "done" }));
+  }
+  S.ctl = new AbortController(); S.busy = true; S.err = ""; S.result = null; S.view = "confirm"; render();
+  try {
+    const raw = await sample.json(`${PROMPT}\n\n${FORMAT}\n\n這次的輸入：\n${JSON.stringify(input)}`, { signal: S.ctl.signal, cache: false });
+    const res = normalizeResult(raw);
+    if (!res) throw { code: "invalid_json" };
+    S.result = res;
+  } catch (e) {
+    S.err = errorText(e);
+    if (e && e.code === "cancelled") S.view = "input";
+  } finally { S.busy = false; S.ctl = null; render(); }
+}
+
+/* ================= speech ================= */
+let voice = null;
+function pickVoice() {
+  try {
+    const vs = speechSynthesis.getVoices();
+    voice = vs.find(v => v.lang === "es-ES") || vs.find(v => /^es/i.test(v.lang)) || null;
+  } catch (e) {}
+}
+try { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } catch (e) {}
+function speak(text) {
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text.replace(/…/g, ""));
+    u.lang = "es-ES"; if (voice) u.voice = voice; u.rate = .9;
+    speechSynthesis.speak(u);
+  } catch (e) { S.toast = "這個瀏覽器沒辦法播放發音。"; render(); }
+}
+const playBtn = (text, label = "播放發音") => `<button class="play" data-speak="${esc(text)}" aria-label="${label}">${ICON.play}</button>`;
+
+/* ================= state ================= */
+const S = {
+  view: "home", tab: "today", session: "morning", text: "", result: null, busy: false, err: "", ctl: null,
+  queue: [], qi: 0, revealed: false, hint: false, practiced: [], filter: "all", open: null, confirmDel: null,
+  planStatus: {}, aiOff: false, name: "", saveErr: "", toast: "", returnTab: "today",
+};
+
+function today() { return data.profile.days[dayKey()] || {}; }
+function morningPlan() { const k = dayKey(); return data.sentences.filter(s => s.day === k && s.session === "morning").reverse(); }
+function greeting() { const h = new Date().getHours(); return h < 12 ? "Buenos días" : h < 20 ? "Buenas tardes" : "Buenas noches"; }
+function dateLabel() { const d = new Date(); return `${d.getMonth() + 1}月${d.getDate()}日 星期${"日一二三四五六"[d.getDay()]}`; }
+
+/* ================= views ================= */
+const app = document.getElementById("app"), tabs = document.getElementById("tabs");
+
+function render() {
+  const flow = ["input", "confirm", "practice", "done"].includes(S.view);
+  app.className = "app" + (flow ? " flow" : "");
+  tabs.hidden = flow;
+  if (S.view === "input") app.innerHTML = viewInput();
+  else if (S.view === "confirm") app.innerHTML = viewConfirm();
+  else if (S.view === "practice") app.innerHTML = viewPractice();
+  else if (S.view === "done") app.innerHTML = viewDone();
+  else if (S.tab === "library") app.innerHTML = viewLibrary();
+  else if (S.tab === "review") app.innerHTML = viewReview();
+  else app.innerHTML = viewHome();
+  tabs.innerHTML = `<div class="in">${[["today", "今天"], ["library", "句庫"], ["review", "視訊前"]].map(([k, l]) => `<button data-tab="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${ICON[k]}<span>${l}</span></button>`).join("")}</div>`;
+  const ta = document.getElementById("entry"); if (ta && S.view === "input" && !ta.dataset.bound) { ta.dataset.bound = "1"; }
+}
+
+function viewHome() {
+  const t = today(), doneToday = !!(t.morning || t.evening), evening = new Date().getHours() >= 15;
+  const plan = morningPlan();
+  const morningCard = `<section class="card ${t.morning ? "done" : evening ? "" : "hero"}">
+      <div class="between"><span class="eyebrow">早上・計畫</span>${t.morning ? '<span class="chip ok">完成</span>' : '<span class="chip accent">今天的一句</span>'}</div>
+      <h2 class="title" style="font-size:20px">今天打算做什麼？</h2>
+      ${t.morning && plan.length ? `<p class="es" style="font-size:19px">${esc(plan[0].simple)}</p>` : `<p class="sub">用 ir a + 原形動詞說今天的計畫</p>`}
+      <button class="btn ${t.morning ? "secondary" : ""}" data-start="morning">${t.morning ? "再寫一句" : "開始"}</button>
+    </section>`;
+  const eveningCard = `<section class="card ${t.evening ? "done" : evening ? "hero" : ""}">
+      <div class="between"><span class="eyebrow">晚上・回顧</span>${t.evening ? '<span class="chip ok">完成</span>' : '<span class="chip">加分</span>'}</div>
+      <h2 class="title" style="font-size:20px">今天做了什麼？</h2>
+      <p class="sub">${plan.length ? `會用早上的 ${plan.length} 句計畫幫你回顧，只要確認或修改` : "像寫日記一樣，回想今天做了什麼"}</p>
+      <button class="btn ${t.evening ? "secondary" : evening ? "" : "secondary"}" data-start="evening">${t.evening ? "再寫一句" : "開始回顧"}</button>
+    </section>`;
+  const stuck = data.sentences.filter(s => s.status === "stuck").length;
+  return `
+    <header class="stack" style="gap:4px">
+      <p class="eyebrow">${dateLabel()}</p>
+      <h1 class="greet">${greeting()}${S.name ? ", " + esc(S.name) : ""}</h1>
+    </header>
+    ${S.aiOff ? `<div class="error">這裡沒辦法使用 Claude，轉換功能暫時不能用。請在 claude.ai 登入後打開這個頁面；句庫和複習照常可以用。</div>` : ""}
+    ${S.saveErr ? `<div class="error">${esc(S.saveErr)}</div>` : ""}
+    ${evening ? eveningCard + morningCard : morningCard + eveningCard}
+    <section class="card">
+      <span class="eyebrow">下次視訊前</span>
+      <h2 style="font-size:16px;font-weight:600">${data.sentences.length ? `快速複習最近的句子${stuck ? `，有 ${stuck} 句卡住了` : ""}` : "救命句和反應短句，通話前看一眼"}</h2>
+      <button class="btn secondary" data-tab="review">打開複習</button>
+    </section>
+    <p class="tiny">${doneToday ? "今天的目標達成了。" : "早上或晚上完成一次，就算達成今天的目標。"}　${Store.mode === "cloud" ? "已存在你的 Claude 帳號" : "資料存在這個瀏覽器"}</p>`;
+}
+
+function viewInput() {
+  const evening = S.session === "evening", plan = evening ? morningPlan() : [];
+  const ex = evening ? ["在家工作", "去了健身房", "跟室友煮晚餐", "跟家人視訊"] : ["在家工作", "去健身房", "跟朋友吃飯", "去超市"];
+  return `
+    <button class="back" data-act="home">← ${evening ? "晚上・今天的一句" : "早上・今天的一句"}</button>
+    <h1 class="title">${evening ? "今天做了什麼？" : "今天打算做什麼？"}</h1>
+    <p class="sub">用中文、英文或你會的西文都可以，寫錯也沒關係。</p>
+    ${plan.length ? `<div class="stack"><p class="eyebrow">早上的計畫，做了嗎？</p>${plan.map(p => `<div class="plan"><div class="between"><p class="es" style="font-size:18px">${esc(p.simple)}</p>${playBtn(p.simple)}</div><p class="tiny">${esc(p.zh)}</p>
+      <div class="row wrap">${[["done", "做了"], ["not_done", "沒做"], ["changed", "有改變"]].map(([k, l]) => `<button class="chip" data-plan="${p.id}:${k}" aria-pressed="${(S.planStatus[p.id] || "done") === k}">${l}</button>`).join("")}</div></div>`).join("")}</div>` : ""}
+    <label class="eyebrow" for="entry">${plan.length ? "還有其他想說的嗎？" : "寫下來"}</label>
+    <textarea class="field" id="entry" placeholder="${evening ? "例如：今天跟平常一樣上班，中午吃了涮涮鍋" : "例如：今天要在家工作，晚上跟朋友去吃飯"}">${esc(S.text)}</textarea>
+    <p class="tiny">也可以按鍵盤的麥克風用說的。</p>
+    <div class="row wrap">${ex.map(e => `<button class="chip" data-example="${esc(e)}">${esc(e)}</button>`).join("")}</div>
+    ${S.err ? `<div class="error">${esc(S.err)}</div>` : ""}
+    <button class="btn" data-act="convert" ${S.aiOff ? "disabled" : ""}>轉成西文</button>`;
+}
+
+function chunkHTML(c, rec) {
+  return `<article class="chunk ${rec ? "rec" : ""}">
+    <div class="between" style="align-items:flex-start"><p class="tiny grow">${esc(c.source)}</p>${rec ? '<span class="chip accent" style="background:var(--surface)">推薦練習</span>' : ""}</div>
+    <div class="row" style="align-items:flex-start;gap:12px"><p class="es simple grow">${esc(c.simple)}</p>${playBtn(c.simple)}</div>
+    ${c.natural && c.natural !== c.simple ? `<p class="es natural">${esc(c.natural)}</p>` : ""}
+    <p class="sub" style="color:var(--ink)">${esc(c.meaning_zh)}</p>
+    ${c.tense.name ? `<p class="tense"><b>${esc(TENSES[c.tense.name] || c.tense.name)}</b>　${esc(c.tense.why_zh)}</p>` : ""}
+    ${c.notes.length ? `<div class="notes">${c.notes.map(n => `<span class="chip"><span class="es">${esc(n.es)}</span>${esc(n.zh)}</span>`).join("")}</div>` : ""}
+  </article>`;
+}
+
+function viewConfirm() {
+  if (S.busy) return `<button class="back" data-act="stop">← 停止並返回</button>
+    <h1 class="title">確認意思</h1>
+    <div class="card"><div class="thinking"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><b>正在轉成西文…</b></div>
+    <p class="sub">Claude 正在拆句、判斷時態，通常要 10–40 秒。第一次使用時會先請你允許這個頁面使用 Claude。</p>
+    <button class="btn secondary" data-act="stop">停止</button></div>`;
+  if (!S.result) return `<button class="back" data-act="edit">← 回去修改</button>
+    <h1 class="title">確認意思</h1>${S.err ? `<div class="error">${esc(S.err)}</div>` : ""}
+    <button class="btn" data-act="convert" ${S.aiOff ? "disabled" : ""}>再試一次</button>`;
+  const r = S.result, rec = new Set(r.recommended);
+  const ordered = [...r.chunks].sort((a, b) => rec.has(b.id) - rec.has(a.id));
+  return `<button class="back" data-act="edit">← 回去修改</button>
+    <h1 class="title">確認意思</h1>
+    <div class="stack"><p class="eyebrow">你寫的</p><p class="sub" style="background:var(--muted);border-radius:12px;padding:12px 14px">${esc(S.text)}</p></div>
+    ${r.questions.map(q => `<div class="question"><b>${esc(q.question_zh)}</b><p class="tiny">回答後會記在「我的人物」，下次就不用再問。</p>
+      <div class="pair">${q.options.slice(0, 2).map((o, i) => `<button class="btn secondary" data-answer="${esc(q.id)}:${i}">${esc(o.label_zh)}<span class="es" style="font-size:15px;color:var(--ink-2)">${esc(o.es)}</span></button>`).join("")}</div></div>`).join("")}
+    ${r.corrections.length ? `<div class="card"><span class="eyebrow">這樣說會更自然</span>${r.corrections.map(c => `<p class="sub"><s>${esc(c.original)}</s> → <span class="es" style="color:var(--ink);font-size:17px">${esc(c.corrected)}</span><br>${esc(c.why_zh)}</p>`).join("")}</div>` : ""}
+    ${ordered.map(c => chunkHTML(c, rec.has(c.id))).join("")}
+    ${r.culture.map(x => `<div class="card"><span class="eyebrow">怎麼跟西班牙人解釋「${esc(x.term_zh)}」</span><div class="row" style="align-items:flex-start"><p class="es grow" style="font-size:19px">${esc(x.explain_es)}</p>${playBtn(x.explain_es)}</div><p class="sub">${esc(x.explain_zh)}</p></div>`).join("")}
+    ${S.err ? `<div class="error">${esc(S.err)}</div>` : ""}
+    <div class="stack" style="gap:12px;margin-top:8px">
+      <button class="btn" data-act="save-practice">存進句庫，開始練習</button>
+      <button class="link" data-act="save-only" style="align-self:center">只存進句庫</button>
+    </div>`;
+}
+
+function viewPractice() {
+  const s = S.queue[S.qi]; if (!s) return viewDone();
+  const pct = Math.round((S.qi / S.queue.length) * 100);
+  const head = `<div class="between"><button class="back" data-act="quit">← 練習 ${S.qi + 1} / ${S.queue.length}</button><span class="tiny">${esc(ACTIONS[s.action] || "")}</span></div>
+    <div class="progress" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="練習進度"><i style="width:${pct}%"></i></div>`;
+  if (!S.revealed) return `${head}
+    <p class="sub">先說出口，再翻開答案。</p>
+    <div class="prompt"><p class="eyebrow">用西文怎麼說？</p><p class="zh">${esc(s.zh)}</p></div>
+    ${S.hint ? `<div class="card" style="gap:6px"><p class="tense"><b>${esc(TENSES[s.tenseName] || "提示")}</b>　${esc(s.tenseWhy || "")}</p><p class="sub">開頭是：<span class="es" style="font-size:18px;color:var(--ink)">${esc(s.simple.split(/\s+/).slice(0, 2).join(" "))} …</span></p></div>` : `<div class="hidden-answer">答案已隱藏</div>`}
+    <div class="stack" style="gap:12px;margin-top:auto">
+      ${S.hint ? "" : `<button class="btn secondary" data-act="hint">需要提示</button>`}
+      <button class="btn" data-act="reveal">翻開答案</button>
+    </div>`;
+  return `${head}
+    <div class="card" style="background:var(--muted);border-color:transparent;gap:4px;padding:14px 16px"><p class="tiny">用西文怎麼說？</p><p style="font-weight:600">${esc(s.zh)}</p></div>
+    <div class="answer"><div class="row" style="align-items:flex-start;gap:12px"><p class="es simple grow">${esc(s.simple)}</p>${playBtn(s.simple)}</div>
+      ${s.natural && s.natural !== s.simple ? `<p class="es" style="font-size:17px;color:var(--ink-2)">自然版：${esc(s.natural)}</p>` : ""}
+      ${s.notes && s.notes.length ? `<div class="notes">${s.notes.map(n => `<span class="chip"><span class="es">${esc(n.es)}</span>${esc(n.zh)}</span>`).join("")}</div>` : ""}</div>
+    <h2 style="font-size:17px;text-align:center;margin-top:8px">你剛剛說得出來嗎？</h2>
+    <div class="pair"><button class="btn secondary" data-mark="stuck">卡住了</button><button class="btn" data-mark="ok">說得出來</button></div>
+    <p class="tiny" style="text-align:center">卡住的句子之後會多出現幾次</p>`;
+}
+
+function viewDone() {
+  const ok = S.practiced.filter(x => x === "ok").length, stuck = S.practiced.length - ok;
+  return `<div class="empty" style="padding-top:var(--s48)">
+      <p class="greet" style="color:var(--accent-strong)">¡Muy bien!</p>
+      <h1 class="title">${today().morning || today().evening ? "今天的目標達成了" : "練習完成"}</h1>
+      <p class="sub">${S.practiced.length ? `練了 ${S.practiced.length} 句，${ok} 句說得出來${stuck ? `，${stuck} 句卡住，之後會再出現` : ""}。` : "句子已經存進句庫。"}</p>
+    </div>
+    <button class="btn" data-act="home">回到今天</button>
+    <button class="btn secondary" data-tab="library">看句庫</button>`;
+}
+
+function viewLibrary() {
+  const list = data.sentences.filter(s => S.filter === "all" || (S.filter === "stuck" ? s.status === "stuck" : s.action === S.filter));
+  const counts = k => data.sentences.filter(s => s.action === k).length;
+  const people = data.profile.people;
+  return `<header class="stack" style="gap:4px"><h1 class="title" style="font-size:26px">我的句庫</h1><p class="sub">${data.sentences.length ? `${data.sentences.length} 句，依視訊時最常用的對話動作分類` : "轉換過的句子都會存在這裡"}</p></header>
+    <div class="filters" role="group" aria-label="篩選">
+      <button class="chip" data-filter="all" aria-pressed="${S.filter === "all"}">全部</button>
+      ${Object.entries(ACTIONS).map(([k, l]) => `<button class="chip" data-filter="${k}" aria-pressed="${S.filter === k}">${l} ${counts(k) || ""}</button>`).join("")}
+      <button class="chip" data-filter="stuck" aria-pressed="${S.filter === "stuck"}">卡住了 ${data.sentences.filter(s => s.status === "stuck").length || ""}</button>
+    </div>
+    ${list.length ? `<div class="stack" style="gap:10px">${list.map(itemHTML).join("")}</div>` : data.sentences.length ? `<p class="sub">這個分類還沒有句子。</p>` : `<div class="empty card"><p class="es">Hoy voy a…</p><p style="font-weight:600">還沒有句子</p><p class="sub">到「今天」寫下第一句，轉換後存進來的句子會出現在這裡。</p><button class="btn small" data-start="${new Date().getHours() >= 15 ? "evening" : "morning"}">寫第一句</button></div>`}
+    <section class="stack" style="margin-top:var(--s16)">
+      <p class="section-title">我的人物</p>
+      ${people.length ? `<div class="row wrap">${people.map(p => `<span class="chip">${esc(p.label_zh)}：<span class="es" style="font-size:14px;color:var(--ink)">${esc(p.es)}</span><button class="link" style="font-size:13px;margin-left:4px" data-unperson="${esc(p.label_zh)}" aria-label="移除${esc(p.label_zh)}">×</button></span>`).join("")}</div>` : `<p class="sub">寫到室友、朋友這些人時，AI 會問一次是男生還是女生，答案會記在這裡。</p>`}
+    </section>`;
+}
+
+function itemHTML(s) {
+  const [label, cls] = STATUS[s.status] || STATUS.new, open = S.open === s.id;
+  return `<div class="item">
+    <button style="all:unset;cursor:pointer;display:flex;flex-direction:column;gap:6px" data-open="${s.id}" aria-expanded="${open}">
+      <div class="between" style="align-items:flex-start"><p class="es grow">${esc(s.simple)}</p><span class="chip ${cls}">${label}</span></div>
+      <p class="tiny">${esc(s.zh)}</p>
+    </button>
+    ${open ? `<div class="detail">
+      ${s.natural && s.natural !== s.simple ? `<p class="es" style="font-size:17px;color:var(--ink-2)">自然版：${esc(s.natural)}</p>` : ""}
+      ${s.tenseName ? `<p class="tense"><b>${esc(TENSES[s.tenseName] || s.tenseName)}</b>　${esc(s.tenseWhy || "")}</p>` : ""}
+      ${s.notes && s.notes.length ? `<div class="notes">${s.notes.map(n => `<span class="chip"><span class="es">${esc(n.es)}</span>${esc(n.zh)}</span>`).join("")}</div>` : ""}
+      <div class="between"><div class="row">${playBtn(s.simple)}<span class="tiny">${esc(s.day || "")} ${s.session === "evening" ? "晚上" : s.session === "morning" ? "早上" : ""}</span></div>
+      ${S.confirmDel === s.id ? `<div class="row"><button class="link" data-del="${s.id}">確定刪除</button><button class="link" style="color:var(--ink-2)" data-act="cancel-del">取消</button></div>` : `<button class="link" style="color:var(--ink-2)" data-askdel="${s.id}">刪除</button>`}</div>
+    </div>` : ""}
+  </div>`;
+}
+
+function reviewQueue() {
+  const stuck = data.sentences.filter(s => s.status === "stuck");
+  const rest = data.sentences.filter(s => s.status !== "stuck");
+  return [...stuck, ...rest].slice(0, 5);
+}
+
+function viewReview() {
+  const q = reviewQueue();
+  return `<header class="stack" style="gap:4px"><h1 class="title" style="font-size:26px">視訊前快速複習</h1><p class="sub">通話前把這些過一遍就好。點一下聽發音。</p></header>
+    <p class="section-title">救命句</p>
+    <div class="stack" style="gap:10px">${RESCUE.map(([es, zh]) => `<div class="phrase"><div class="grow"><p class="es">${esc(es)}</p><p class="tiny">${esc(zh)}</p></div>${playBtn(es)}</div>`).join("")}</div>
+    <p class="section-title">反應短句</p>
+    <div class="reacts">${REACTS.map(([es, zh]) => `<button data-speak="${esc(es)}"><span class="es">${esc(es)}</span><span class="tiny">${esc(zh)}</span></button>`).join("")}</div>
+    <p class="section-title">我的句子</p>
+    ${q.length ? `<div class="stack" style="gap:10px">${q.map(s => `<div class="phrase"><div class="grow"><p class="es">${esc(s.simple)}</p><p class="tiny">${esc(s.zh)}${s.status === "stuck" ? "・卡住了" : ""}</p></div>${playBtn(s.simple)}</div>`).join("")}</div>
+      <button class="btn" data-act="practice-review">練習這 ${q.length} 句</button>` : `<p class="sub">句庫還沒有句子。寫下今天的一句後，這裡會列出最近和卡住的句子。</p>`}`;
+}
+
+/* ================= actions ================= */
+async function saveResult(practice) {
+  const r = S.result; if (!r) return;
+  const k = dayKey(), rec = new Set(r.recommended), saved = [];
+  for (const c of r.chunks) {
+    const s = { id: uid(), simple: c.simple, natural: c.natural, zh: c.meaning_zh, action: c.conversation_action, tenseName: c.tense.name, tenseWhy: c.tense.why_zh,
+      notes: c.notes, status: "new", stuckCount: 0, createdAt: Date.now(), day: k, session: S.session, source: c.source, recommended: rec.has(c.id) };
+    Store.addSentence(s); saved.push(s);
+  }
+  const d = data.profile.days[k] || {};
+  d[S.session] = { done: true, at: Date.now() };
+  data.profile.days[k] = d;
+  const keys = Object.keys(data.profile.days).sort(); while (keys.length > 120) delete data.profile.days[keys.shift()];
+  Store.saveProfile();
+  S.text = ""; S.result = null; S.planStatus = {};
+  if (practice) { S.queue = saved.filter(s => s.recommended); S.qi = 0; S.revealed = false; S.hint = false; S.practiced = []; S.view = "practice"; }
+  else { S.practiced = []; S.view = "done"; }
+  render();
+}
+
+function answer(qid, idx) {
+  const q = S.result && S.result.questions.find(x => String(x.id) === qid); if (!q) return;
+  const o = q.options[+idx]; if (!o) return;
+  const label = q.person_label_zh || o.es;
+  data.profile.people = [...data.profile.people.filter(p => p.label_zh !== label), { label_zh: label, es: o.es, gender: o.gender === "f" ? "f" : "m" }];
+  Store.saveProfile();
+  convert();
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const d = b.dataset;
+  if (d.speak) { speak(d.speak); return; }
+  if (d.tab) { S.tab = d.tab; S.view = "home"; S.open = null; render(); scrollTo(0, 0); return; }
+  if (d.start) { S.session = d.start; S.view = "input"; S.err = ""; S.result = null; S.planStatus = {}; render(); scrollTo(0, 0); return; }
+  if (d.example) { const ta = document.getElementById("entry"); S.text = (ta ? ta.value : S.text); S.text = (S.text ? S.text.replace(/\s*$/, "，") : "") + d.example; render(); const t2 = document.getElementById("entry"); if (t2) { t2.focus(); t2.setSelectionRange(t2.value.length, t2.value.length); } return; }
+  if (d.plan) { const [id, st] = d.plan.split(":"); S.planStatus[id] = st; const ta = document.getElementById("entry"); if (ta) S.text = ta.value; render(); return; }
+  if (d.answer) { const i = d.answer.lastIndexOf(":"); answer(d.answer.slice(0, i), d.answer.slice(i + 1)); return; }
+  if (d.mark) {
+    const s = S.queue[S.qi];
+    Store.updateSentence(s.id, d.mark === "stuck" ? { status: "stuck", stuckCount: (s.stuckCount || 0) + 1, practicedAt: Date.now() } : { status: "ok", practicedAt: Date.now() });
+    S.practiced.push(d.mark); S.qi++; S.revealed = false; S.hint = false;
+    S.view = S.qi >= S.queue.length ? "done" : "practice"; render(); scrollTo(0, 0); return;
+  }
+  if (d.filter) { S.filter = d.filter; S.open = null; render(); return; }
+  if (d.open) { S.open = S.open === d.open ? null : d.open; S.confirmDel = null; render(); return; }
+  if (d.askdel) { S.confirmDel = d.askdel; render(); return; }
+  if (d.del) { Store.deleteSentence(d.del); S.confirmDel = null; S.open = null; render(); return; }
+  if (d.unperson) { data.profile.people = data.profile.people.filter(p => p.label_zh !== d.unperson); Store.saveProfile(); render(); return; }
+  switch (d.act) {
+    case "home": S.view = "home"; S.tab = "today"; S.err = ""; render(); scrollTo(0, 0); break;
+    case "convert": { const ta = document.getElementById("entry"); if (ta) S.text = ta.value; if (!S.text.trim()) { S.err = "先寫下想說的話。"; render(); break; } convert(); scrollTo(0, 0); break; }
+    case "stop": if (S.ctl) S.ctl.abort(); S.view = "input"; render(); break;
+    case "edit": S.view = "input"; S.err = ""; render(); break;
+    case "save-practice": saveResult(true); scrollTo(0, 0); break;
+    case "save-only": saveResult(false); scrollTo(0, 0); break;
+    case "hint": S.hint = true; render(); break;
+    case "reveal": S.revealed = true; render(); break;
+    case "quit": S.view = S.practiced.length ? "done" : "home"; render(); break;
+    case "cancel-del": S.confirmDel = null; render(); break;
+    case "practice-review": S.queue = reviewQueue(); S.qi = 0; S.revealed = false; S.hint = false; S.practiced = []; S.view = "practice"; render(); scrollTo(0, 0); break;
+  }
+});
+document.addEventListener("input", e => { if (e.target.id === "entry") S.text = e.target.value; });
+
+render();
+Store.init().then(() => { getSample().then(s => { if (!s) S.aiOff = true; render(); }); render(); });
+</script>
