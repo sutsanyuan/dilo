@@ -1,0 +1,180 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  max-width: 560px;
+  margin: 0 auto;
+  padding: var(--space-48) var(--space-20) var(--space-48);
+}
+
+.eyebrow {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-ink-secondary);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.segment {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.segmentItem,
+.segmentActive {
+  padding: var(--space-8) var(--space-16);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.segmentActive {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-surface);
+}
+
+.textarea {
+  padding: var(--space-16);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: 16px;
+  resize: vertical;
+}
+
+.primary,
+.secondary {
+  padding: 14px var(--space-20);
+  border-radius: var(--radius-pill);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary {
+  border: none;
+  background: var(--color-accent-strong);
+  color: var(--color-on-accent);
+}
+
+.primary:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.secondary {
+  flex: 1;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  font-size: 14px;
+}
+
+.error {
+  color: var(--color-accent-strong);
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  gap: var(--space-12);
+}
+
+.people,
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.question {
+  padding: var(--space-16);
+  border-radius: var(--radius-md);
+  background: var(--color-status-stuck-tint);
+}
+
+.questionText {
+  font-weight: 600;
+}
+
+.card,
+.cardRecommended {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-20);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+}
+
+.cardRecommended {
+  background: var(--color-accent-tint);
+  border-color: transparent;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-12);
+}
+
+.badge {
+  flex-shrink: 0;
+  padding: 2px var(--space-8);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-strong);
+  color: var(--color-on-accent);
+  font-size: 12px;
+}
+
+.simple {
+  font-size: 26px;
+}
+
+.small {
+  font-size: 14px;
+  color: var(--color-ink-secondary);
+}
+
+.tense {
+  font-size: 13px;
+  color: var(--color-ink);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.chip,
+.chipMuted {
+  padding: var(--space-4) var(--space-12);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+  border: none;
+  font-size: 13px;
+}
+
+.chip {
+  cursor: pointer;
+}
+
+.raw {
+  font-size: 12px;
+  color: var(--color-ink-secondary);
+}
+
+.raw pre {
+  margin-top: var(--space-8);
+  padding: var(--space-12);
+  overflow-x: auto;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+}

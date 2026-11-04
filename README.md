@@ -68,5 +68,9 @@ LINE Seed TW 加入步驟：
 ## AI 句子轉換
 
 - 指令：`src/lib/ai/convert-prompt.ts`
-- 格式：`src/lib/ai/types.ts`
-- 下一步：新增 `src/app/api/convert/route.ts`，把指令接上 Claude API。
+- 格式：`src/lib/ai/types.ts`（TypeScript）、`src/lib/ai/schemas/response.schema.json`（送給 API 強制回傳格式）
+- 呼叫 Claude：`src/lib/ai/convert.ts`，預設模型 `claude-sonnet-5-5`，可用環境變數 `CLAUDE_MODEL` 更換
+- API：`POST /api/convert`（`src/app/api/convert/route.ts`）
+- 測試頁：http://localhost:3000/try ，輸入句子看 AI 的轉換結果；遇到新人物會詢問性別，答案存在瀏覽器裡
+
+> 目前 `/api/convert` 沒有登入保護，部署到公開網址前要先加上，否則任何人都能用掉你的 API 額度。

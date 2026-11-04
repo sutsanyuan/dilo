@@ -3,33 +3,104 @@
   "title": "ConvertResponse",
   "description": "AI 回傳的資料，直接用於「確認意思」與「練習」畫面",
   "type": "object",
-  "required": ["input_language", "time_reference", "chunks", "recommended_for_practice", "corrections", "questions", "new_people", "culture_explanations"],
+  "required": [
+    "input_language",
+    "time_reference",
+    "chunks",
+    "recommended_for_practice",
+    "corrections",
+    "questions",
+    "new_people",
+    "culture_explanations"
+  ],
   "additionalProperties": false,
   "properties": {
-    "input_language": { "enum": ["zh", "en", "es", "mixed"] },
-    "time_reference": { "enum": ["plan_today", "today", "yesterday_or_before", "mixed"] },
+    "input_language": {
+      "type": "string",
+      "enum": [
+        "zh",
+        "en",
+        "es",
+        "mixed"
+      ]
+    },
+    "time_reference": {
+      "type": "string",
+      "enum": [
+        "plan_today",
+        "today",
+        "yesterday_or_before",
+        "mixed"
+      ]
+    },
     "chunks": {
       "type": "array",
       "minItems": 1,
       "maxItems": 6,
       "items": {
         "type": "object",
-        "required": ["id", "source", "natural", "simple", "meaning_zh", "conversation_action", "tense", "notes", "practice_priority"],
+        "required": [
+          "id",
+          "source",
+          "natural",
+          "simple",
+          "meaning_zh",
+          "conversation_action",
+          "tense",
+          "notes",
+          "practice_priority"
+        ],
         "additionalProperties": false,
         "properties": {
-          "id": { "type": "string", "pattern": "^c[0-9]+$" },
-          "source": { "type": "string", "description": "對應到使用者原文的那一段" },
-          "natural": { "type": "string", "description": "自然版" },
-          "simple": { "type": "string", "description": "簡單版，能說出口" },
-          "meaning_zh": { "type": "string" },
-          "conversation_action": { "enum": ["say_today", "say_place", "ask_other", "react"] },
+          "id": {
+            "type": "string",
+            "pattern": "^c[0-9]+$"
+          },
+          "source": {
+            "type": "string",
+            "description": "對應到使用者原文的那一段"
+          },
+          "natural": {
+            "type": "string",
+            "description": "自然版"
+          },
+          "simple": {
+            "type": "string",
+            "description": "簡單版，能說出口"
+          },
+          "meaning_zh": {
+            "type": "string"
+          },
+          "conversation_action": {
+            "type": "string",
+            "enum": [
+              "say_today",
+              "say_place",
+              "ask_other",
+              "react"
+            ]
+          },
           "tense": {
             "type": "object",
-            "required": ["name", "why_zh"],
+            "required": [
+              "name",
+              "why_zh"
+            ],
             "additionalProperties": false,
             "properties": {
-              "name": { "enum": ["ir_a_infinitivo", "preterito_perfecto", "preterito_indefinido", "preterito_imperfecto", "presente"] },
-              "why_zh": { "type": "string" }
+              "name": {
+                "type": "string",
+                "enum": [
+                  "ir_a_infinitivo",
+                  "preterito_perfecto",
+                  "preterito_indefinido",
+                  "preterito_imperfecto",
+                  "presente"
+                ]
+              },
+              "why_zh": {
+                "type": "string"
+              }
             }
           },
           "notes": {
@@ -37,16 +108,39 @@
             "maxItems": 3,
             "items": {
               "type": "object",
-              "required": ["type", "es", "zh"],
+              "required": [
+                "type",
+                "es",
+                "zh"
+              ],
               "additionalProperties": false,
               "properties": {
-                "type": { "enum": ["vocab", "grammar", "spain_usage", "culture"] },
-                "es": { "type": "string" },
-                "zh": { "type": "string" }
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "vocab",
+                    "grammar",
+                    "spain_usage",
+                    "culture"
+                  ]
+                },
+                "es": {
+                  "type": "string"
+                },
+                "zh": {
+                  "type": "string"
+                }
               }
             }
           },
-          "practice_priority": { "enum": [1, 2, 3] }
+          "practice_priority": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          }
         }
       }
     },
@@ -54,18 +148,31 @@
       "type": "array",
       "minItems": 1,
       "maxItems": 2,
-      "items": { "type": "string", "pattern": "^c[0-9]+$" }
+      "items": {
+        "type": "string",
+        "pattern": "^c[0-9]+$"
+      }
     },
     "corrections": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["original", "corrected", "why_zh"],
+        "required": [
+          "original",
+          "corrected",
+          "why_zh"
+        ],
         "additionalProperties": false,
         "properties": {
-          "original": { "type": "string" },
-          "corrected": { "type": "string" },
-          "why_zh": { "type": "string" }
+          "original": {
+            "type": "string"
+          },
+          "corrected": {
+            "type": "string"
+          },
+          "why_zh": {
+            "type": "string"
+          }
         }
       }
     },
@@ -73,24 +180,54 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "about", "question_zh", "options"],
+        "required": [
+          "id",
+          "about",
+          "question_zh",
+          "options"
+        ],
         "additionalProperties": false,
         "properties": {
-          "id": { "type": "string" },
-          "about": { "enum": ["person_gender"] },
-          "person_label_zh": { "type": "string" },
-          "question_zh": { "type": "string" },
+          "id": {
+            "type": "string"
+          },
+          "about": {
+            "type": "string",
+            "enum": [
+              "person_gender"
+            ]
+          },
+          "person_label_zh": {
+            "type": "string"
+          },
+          "question_zh": {
+            "type": "string"
+          },
           "options": {
             "type": "array",
             "minItems": 2,
             "items": {
               "type": "object",
-              "required": ["label_zh", "es", "gender"],
+              "required": [
+                "label_zh",
+                "es",
+                "gender"
+              ],
               "additionalProperties": false,
               "properties": {
-                "label_zh": { "type": "string" },
-                "es": { "type": "string" },
-                "gender": { "enum": ["f", "m"] }
+                "label_zh": {
+                  "type": "string"
+                },
+                "es": {
+                  "type": "string"
+                },
+                "gender": {
+                  "type": "string",
+                  "enum": [
+                    "f",
+                    "m"
+                  ]
+                }
               }
             }
           }
@@ -101,12 +238,27 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["label_zh", "es", "gender"],
+        "required": [
+          "label_zh",
+          "es",
+          "gender"
+        ],
         "additionalProperties": false,
         "properties": {
-          "label_zh": { "type": "string" },
-          "es": { "type": "string" },
-          "gender": { "enum": ["f", "m", "unknown"] }
+          "label_zh": {
+            "type": "string"
+          },
+          "es": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "f",
+              "m",
+              "unknown"
+            ]
+          }
         }
       }
     },
@@ -114,13 +266,26 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["term_zh", "es", "explain_es", "explain_zh"],
+        "required": [
+          "term_zh",
+          "es",
+          "explain_es",
+          "explain_zh"
+        ],
         "additionalProperties": false,
         "properties": {
-          "term_zh": { "type": "string" },
-          "es": { "type": "string" },
-          "explain_es": { "type": "string" },
-          "explain_zh": { "type": "string" }
+          "term_zh": {
+            "type": "string"
+          },
+          "es": {
+            "type": "string"
+          },
+          "explain_es": {
+            "type": "string"
+          },
+          "explain_zh": {
+            "type": "string"
+          }
         }
       }
     }
