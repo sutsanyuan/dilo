@@ -18,8 +18,8 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "西文學習 App", // 產品名稱還沒決定，先用暫名
-  description: "每天一句，把生活說成西文",
+  title: "Dilo",
+  description: "Dilo：每天一句，把生活說出口",
 };
 
 export const viewport: Viewport = {

@@ -1,6 +1,6 @@
-# 西文學習 App（暫名）
+# Dilo
 
-每天丟進一句生活裡的話，AI 幫你轉成西班牙西文，練到能在視訊時說出口。
+*¡Dilo!*（說出來！）每天丟進一句生活裡的話，AI 幫你轉成西班牙西文，練到能在視訊時說出口。
 
 - 專案規劃文件：Claude Docs「語言學習 App：專案規劃（MVP：西班牙文）」
 - 設計稿：Figma「西文學習 App – Wireframes v1」（Wireframes、Type Specimen、Color & Shape 三頁）
