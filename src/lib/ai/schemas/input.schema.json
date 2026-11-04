@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ConvertInput",
+  "description": "app 送給 AI 的資料（放在 user message）",
+  "type": "object",
+  "required": ["target_language", "mode", "session", "written_at", "user_text", "people"],
+  "additionalProperties": false,
+  "properties": {
+    "target_language": { "const": "es-ES", "description": "目前只支援西班牙西文" },
+    "mode": { "enum": ["breakthrough"], "description": "學習模式；MVP 只有突破模式" },
+    "session": { "enum": ["morning", "evening", "post_call"], "description": "早上計畫、晚上回顧、視訊後回顧" },
+    "written_at": { "type": "string", "format": "date-time", "description": "寫下的時間，含時區，例：2026-11-04T21:30:00+08:00" },
+    "user_text": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "morning_plan": {
+      "type": "array",
+      "description": "晚上回顧時，附上早上的計畫句子與使用者選的狀態",
+      "items": {
+        "type": "object",
+        "required": ["es", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "es": { "type": "string" },
+          "status": { "enum": ["done", "not_done", "changed"] }
+        }
+      }
+    },
+    "people": {
+      "type": "array",
+      "description": "「我的人物」清單",
+      "items": { "$ref": "#/$defs/person" }
+    }
+  },
+  "$defs": {
+    "person": {
+      "type": "object",
+      "required": ["label_zh", "es", "gender"],
+      "additionalProperties": false,
+      "properties": {
+        "label_zh": { "type": "string", "description": "使用者怎麼稱呼，例：室友" },
+        "es": { "type": "string", "description": "西文說法，例：mi compañera de piso" },
+        "gender": { "enum": ["f", "m", "unknown"] }
+      }
+    }
+  }
+}

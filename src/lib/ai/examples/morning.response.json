@@ -1,0 +1,52 @@
+{
+  "input_language": "zh",
+  "time_reference": "plan_today",
+  "chunks": [
+    {
+      "id": "c1",
+      "source": "今天我一樣要去工作",
+      "natural": "Hoy voy a trabajar como siempre.",
+      "simple": "Hoy voy a trabajar.",
+      "meaning_zh": "今天我一樣要去工作。",
+      "conversation_action": "say_today",
+      "tense": { "name": "ir_a_infinitivo", "why_zh": "今天打算要做的事，用 ir a + 原形動詞。" },
+      "notes": [
+        { "type": "vocab", "es": "como siempre", "zh": "跟平常一樣" }
+      ],
+      "practice_priority": 2
+    },
+    {
+      "id": "c2",
+      "source": "但下班有一個任務是要去朋友家顧一下貓",
+      "natural": "Pero después del trabajo tengo una misión: voy a ir a casa de un amigo a cuidar a su gato.",
+      "simple": "Después voy a cuidar al gato de un amigo.",
+      "meaning_zh": "但下班後有個任務：要去朋友家顧他的貓。",
+      "conversation_action": "say_today",
+      "tense": { "name": "ir_a_infinitivo", "why_zh": "等一下要做的事，一樣用 ir a + 原形動詞。" },
+      "notes": [
+        { "type": "vocab", "es": "después del trabajo", "zh": "下班後" },
+        { "type": "grammar", "es": "cuidar a su gato", "zh": "照顧動物時，西文常在前面加 a" },
+        { "type": "vocab", "es": "tengo una misión", "zh": "我有個任務（俏皮的說法，一般也可說 tengo que…）" }
+      ],
+      "practice_priority": 1
+    }
+  ],
+  "recommended_for_practice": ["c2"],
+  "corrections": [],
+  "questions": [
+    {
+      "id": "q1",
+      "about": "person_gender",
+      "person_label_zh": "朋友（顧貓）",
+      "question_zh": "要顧貓的這位朋友是男生還是女生？",
+      "options": [
+        { "label_zh": "男生", "es": "un amigo", "gender": "m" },
+        { "label_zh": "女生", "es": "una amiga", "gender": "f" }
+      ]
+    }
+  ],
+  "new_people": [
+    { "label_zh": "朋友（顧貓）", "es": "un amigo", "gender": "unknown" }
+  ],
+  "culture_explanations": []
+}

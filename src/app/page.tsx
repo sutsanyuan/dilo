@@ -1,69 +1,47 @@
-import Image from "next/image";
 import styles from "./page.module.css";
 
+/**
+ * 首頁（第一版骨架）
+ * 目前是靜態畫面，用來確認字體和設計變數都正確套用。
+ * 之後會接上真實資料：今天的一句是否完成、最近的句子等。
+ */
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className={styles.screen}>
+      <header className={styles.header}>
+        <p className={styles.date}>11月4日 星期三</p>
+        <h1 className={`spanish ${styles.greeting}`}>Buenos días, Tsan</h1>
+      </header>
+
+      <section className={styles.card}>
+        <div className={styles.cardTop}>
+          <span className={styles.eyebrow}>今天的一句</span>
+          <span className={`${styles.chip} ${styles.chipAccent}`}>未完成</span>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <h2 className={styles.cardTitle}>早上 · 今天打算做什麼？</h2>
+        <button className={styles.buttonPrimary} type="button">
+          開始
+        </button>
+      </section>
+
+      <section className={styles.card}>
+        <div className={styles.cardTop}>
+          <span className={styles.eyebrow}>晚上回顧</span>
+          <span className={styles.chip}>加分</span>
         </div>
-      </main>
-    </div>
+        <h2 className={styles.cardTitle}>晚上 · 今天做了什麼？</h2>
+        <p className={styles.secondary}>會用早上的句子幫你回顧，只要確認或修改</p>
+      </section>
+
+      <section className={styles.card}>
+        <span className={styles.eyebrow}>下次視訊前</span>
+        <h2 className={styles.cardTitleSmall}>快速複習最近的句子和反應短句</h2>
+        <button className={styles.buttonSecondary} type="button">
+          開始複習
+        </button>
+      </section>
+
+      <p className={styles.footnote}>早上或晚上完成一次，就算達成今天的目標</p>
+    </main>
   );
 }

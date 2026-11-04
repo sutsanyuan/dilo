@@ -1,0 +1,74 @@
+{
+  "input_language": "zh",
+  "time_reference": "today",
+  "chunks": [
+    {
+      "id": "c1",
+      "source": "今天我跟平常一樣要上班",
+      "natural": "Hoy he trabajado como siempre.",
+      "simple": "Hoy he trabajado.",
+      "meaning_zh": "今天我跟平常一樣上班。",
+      "conversation_action": "say_today",
+      "tense": { "name": "preterito_perfecto", "why_zh": "今天已經做完的事，用現在完成式：he + 過去分詞。" },
+      "notes": [
+        { "type": "vocab", "es": "como siempre", "zh": "跟平常一樣" }
+      ],
+      "practice_priority": 1
+    },
+    {
+      "id": "c2",
+      "source": "中午去吃了涮涮鍋",
+      "natural": "Al mediodía he ido a comer shabu-shabu.",
+      "simple": "He comido shabu-shabu.",
+      "meaning_zh": "中午去吃了涮涮鍋。",
+      "conversation_action": "say_today",
+      "tense": { "name": "preterito_perfecto", "why_zh": "今天中午發生的事，還是算「今天」，用現在完成式。" },
+      "notes": [
+        { "type": "vocab", "es": "al mediodía", "zh": "中午" },
+        { "type": "grammar", "es": "he ido a comer", "zh": "去吃了（ir a + 原形動詞的過去說法）" }
+      ],
+      "practice_priority": 2
+    },
+    {
+      "id": "c3",
+      "source": "晚上跟室友一起煮晚餐",
+      "natural": "Por la noche he cocinado la cena con mi compañera de piso.",
+      "simple": "He cocinado con mi compañera de piso.",
+      "meaning_zh": "晚上跟室友一起煮晚餐。",
+      "conversation_action": "say_today",
+      "tense": { "name": "preterito_perfecto", "why_zh": "今天晚上做的事，用現在完成式。" },
+      "notes": [
+        { "type": "spain_usage", "es": "compañera de piso", "zh": "室友（女）。西班牙的說法，拉美常說 compañera de cuarto" },
+        { "type": "vocab", "es": "por la noche", "zh": "晚上" }
+      ],
+      "practice_priority": 2
+    },
+    {
+      "id": "c4",
+      "source": "本來打算早點去健身房但後來看電視拖到十點才去健身房",
+      "natural": "Quería ir pronto al gimnasio, pero me he quedado viendo la tele y al final no he ido hasta las diez.",
+      "simple": "Quería ir pronto al gimnasio, pero he ido a las diez.",
+      "meaning_zh": "本來想早點去健身房，但一直看電視，結果拖到十點才去。",
+      "conversation_action": "say_today",
+      "tense": { "name": "preterito_imperfecto", "why_zh": "「本來想要」用未完成過去式 quería；後面今天發生的事仍用現在完成式。" },
+      "notes": [
+        { "type": "grammar", "es": "Quería…, pero…", "zh": "本來想…，但是…（很好用的句型）" },
+        { "type": "vocab", "es": "me he quedado viendo la tele", "zh": "一直看電視（拖著沒去）" },
+        { "type": "grammar", "es": "no he ido hasta las diez", "zh": "直到十點才去（no…hasta…）" }
+      ],
+      "practice_priority": 1
+    }
+  ],
+  "recommended_for_practice": ["c1", "c4"],
+  "corrections": [],
+  "questions": [],
+  "new_people": [],
+  "culture_explanations": [
+    {
+      "term_zh": "涮涮鍋",
+      "es": "shabu-shabu",
+      "explain_es": "Es como una fondue de caldo asiática.",
+      "explain_zh": "像一種亞洲的湯底火鍋。"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+/*
+ * 設計變數（Design Tokens）
+ * 來源：Figma「西文學習 App – Wireframes v1」的變數集「Tokens」
+ * 命名規則和 Figma 一致：Figma 的 color/accent → CSS 的 --color-accent
+ * 改這裡的值，全站一起更新。
+ */
+:root {
+  /* ---------- 顏色：主色（陶土橘） ---------- */
+  --color-accent: #d9512c;        /* 裝飾、淡色底上的強調 */
+  --color-accent-strong: #c4441f; /* 主按鈕、強調文字（白字對比約 5:1） */
+  --color-accent-tint: #fbe4db;   /* 西文主角卡片底色、未完成標籤 */
+  --color-on-accent: #ffffff;     /* 主色上的文字 */
+
+  /* ---------- 顏色：背景與表面 ---------- */
+  --color-bg: #faf7f2;            /* 畫面背景（米白） */
+  --color-surface: #ffffff;       /* 卡片 */
+  --color-surface-muted: #f2ece3; /* 標籤、次要區塊 */
+
+  /* ---------- 顏色：文字與線 ---------- */
+  --color-ink: #1f1b16;           /* 主要文字 */
+  --color-ink-secondary: #6e665c; /* 次要文字 */
+  --color-line: #e8e1d6;          /* 框線、分隔線 */
+
+  /* ---------- 顏色：練習狀態 ---------- */
+  --color-status-stuck: #b9770e;      /* 卡住了 */
+  --color-status-stuck-tint: #f7ebd3;
+  --color-status-ok: #4f7d5c;         /* 說得出來 */
+  --color-status-ok-tint: #e2ede4;
+
+  /* ---------- 間距：以 4 為單位 ---------- */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+
+  /* ---------- 圓角 ---------- */
+  --radius-sm: 8px;
+  --radius-md: 12px;   /* 輸入框、小區塊 */
+  --radius-lg: 20px;   /* 卡片 */
+  --radius-pill: 999px; /* 按鈕、標籤 */
+
+  /* ---------- 字體 ---------- */
+  /*
+   * 英文字體排在中文字體前面：中英混排時，英文字母用 Plus Jakarta Sans，
+   * 中文才會落到 LINE Seed TW。
+   * LINE Seed TW 尚未放入專案（見 README「字體」一節），
+   * 在那之前中文會使用 iPhone 的蘋方或 Noto Sans TC。
+   */
+  --font-ui: var(--font-jakarta), "LINE Seed TW", "PingFang TC", "Noto Sans TC", system-ui, sans-serif;
+  --font-spanish: var(--font-newsreader), Georgia, "Times New Roman", serif;
+}

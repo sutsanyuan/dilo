@@ -1,0 +1,10 @@
+{
+  "target_language": "es-ES",
+  "mode": "breakthrough",
+  "session": "morning",
+  "written_at": "2026-11-04T10:05:00+08:00",
+  "user_text": "今天我一樣要去工作，但下班有一個任務是要去朋友家顧一下貓",
+  "people": [
+    { "label_zh": "室友", "es": "mi compañera de piso", "gender": "f" }
+  ]
+}

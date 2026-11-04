@@ -1,0 +1,10 @@
+{
+  "target_language": "es-ES",
+  "mode": "breakthrough",
+  "session": "evening",
+  "written_at": "2026-11-03T21:30:00+08:00",
+  "user_text": "今天我跟平常一樣要上班，中午去吃了涮涮鍋，晚上跟室友一起煮晚餐，本來打算早點去健身房但後來看電視拖到十點才去健身房",
+  "people": [
+    { "label_zh": "室友", "es": "mi compañera de piso", "gender": "f" }
+  ]
+}
