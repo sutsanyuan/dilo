@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Dilo",
+    "description": "One sentence a day. Say your life out loud."
+  },
+  "home": {
+    "morning": {
+      "label": "Today's sentence",
+      "title": "Morning · What are you going to do today?",
+      "start": "Start"
+    },
+    "evening": {
+      "label": "Evening review",
+      "title": "Evening · What did you do today?",
+      "hint": "We'll use your sentences from this morning. Just confirm or edit them."
+    },
+    "review": {
+      "label": "Before your next call",
+      "title": "Quickly go over your recent sentences and reaction phrases",
+      "start": "Start review"
+    },
+    "status": {
+      "todo": "Not done",
+      "bonus": "Bonus"
+    },
+    "goal": "Do it once, morning or evening, and today's goal is done."
+  }
+}
