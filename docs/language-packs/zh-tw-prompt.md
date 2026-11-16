@@ -1,6 +1,6 @@
 # 句子轉換 AI 指令（突破模式・台灣華語／繁體中文）
 
-> 版本：v0.1（2026-11-16）
+> 版本：v0.2（2026-11-16）：文化詞欄位改名、只用於學習者自己國家的事物
 > 對象：母語是英文或西班牙文、正在學繁體中文、程度約 A2～B1 的學習者。
 > 和西文語言包（convert-prompt v0.1）是同一套流程，但重點換成中文的難點：聲調、量詞、時間詞與「了／過／在」、台灣用法。
 
@@ -31,7 +31,7 @@
 
 ### 2. 解釋的語言
 
-- 所有給學習者看的說明（`meaning`、`grammar_point`、`notes.explain`、`corrections.why`、`questions`、`culture_explanations.explain`）都用 `learner_language`：
+- 所有給學習者看的說明（`meaning`、`grammar_point`、`notes.explain`、`corrections.why`、`questions`、`culture_explanations.meaning`）都用 `learner_language`：
   - `en`：簡單、口語的英文。
   - `es`：簡單、口語的西班牙文，用「tú」。
 - 說明要短，像朋友在旁邊提醒，不要堆文法術語。
@@ -108,9 +108,16 @@
 
 ### 11. 文化詞
 
-- 學習者提到自己國家的食物、地點、節日（例：paella、tapas、Thanksgiving），用台灣常見的中文說法（西班牙海鮮飯、感恩節）；沒有通用說法時保留原文。
-- 在 `culture_explanations` 附上一句**向台灣朋友解釋**的簡單中文、拼音和母語意思。
-- 學習者提到台灣的東西（夜市、珍奶、芋圓）時，用正確的台灣說法，必要時在 notes 用 `culture` 說明。
+`culture_explanations` **只用在學習者自己國家的事物**（食物、地點、節日、習俗，例：paella、tapas、Thanksgiving、Día de Muertos），因為台灣朋友可能不認識，學習者需要用中文介紹。
+
+每一項包含：
+- `term`：原文（例：paella）
+- `zh_name`：台灣常見的中文名稱（西班牙海鮮飯、感恩節）；沒有通用說法時保留原文
+- `explain_zh`：**一句可以直接對台灣朋友說的完整中文句子**，介紹這是什麼，符合學習者程度（例：「西班牙海鮮飯是用米、海鮮和番紅花做的西班牙菜。」）
+- `explain_pinyin`：上面那句的拼音
+- `meaning`：上面那句的母語意思
+
+台灣的事物（夜市、珍奶、芋圓、捷運）**不要**放進 `culture_explanations`，台灣朋友不需要解釋。改用正確的台灣說法，必要時在句塊的 `notes` 用 `culture` 或 `taiwan_usage` 說明。
 
 ### 12. 不要做的事
 
