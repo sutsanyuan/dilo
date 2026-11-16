@@ -1,0 +1,307 @@
+<title>Dilo 中文測試</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a test bench. Summary on top, then one block per test sentence with the two models side by side (stacked on phones). Chinese target text is the largest thing on the page; pinyin sits directly under it. */
+:root{
+  --bg:#faf7f2; --surface:#ffffff; --muted:#f2ece3; --ink:#1f1b16; --ink-2:#6e665c; --line:#e8e1d6;
+  --accent:#c4441f; --accent-tint:#fbe4db; --on-accent:#ffffff;
+  --haiku:#2f6b7a; --haiku-tint:#dcecef; --sonnet:#7a4a2f; --sonnet-tint:#f1e4da;
+  --warn:#a26408; --warn-tint:#f7ebd3;
+  --ui:"Plus Jakarta Sans","Noto Sans TC","PingFang TC",system-ui,sans-serif;
+  --zh:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#191613; --surface:#221e1a; --muted:#2c2722; --ink:#f2ece3; --ink-2:#b3a898; --line:#38312a;
+  --accent:#ef8a66; --accent-tint:#3a241b; --on-accent:#1a1410;
+  --haiku:#7fc1d0; --haiku-tint:#1b2c30; --sonnet:#e0a983; --sonnet-tint:#33251c;
+  --warn:#e3a640; --warn-tint:#372b16; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#191613; --surface:#221e1a; --muted:#2c2722; --ink:#f2ece3; --ink-2:#b3a898; --line:#38312a;
+  --accent:#ef8a66; --accent-tint:#3a241b; --on-accent:#1a1410;
+  --haiku:#7fc1d0; --haiku-tint:#1b2c30; --sonnet:#e0a983; --sonnet-tint:#33251c;
+  --warn:#e3a640; --warn-tint:#372b16; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px;display:flex;flex-direction:column;gap:24px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink-2)}
+.sub{font-size:14px;color:var(--ink-2)}
+.tiny{font-size:12px;color:var(--ink-2)}
+h1{font-size:28px;font-weight:700;line-height:1.25;text-wrap:balance}
+.intro{display:flex;flex-direction:column;gap:8px;max-width:68ch}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.tally{display:flex;flex-wrap:wrap;gap:16px;font-variant-numeric:tabular-nums}
+.tally b{font-size:20px}
+.btn{border:0;border-radius:999px;padding:10px 18px;font-weight:600;background:var(--accent);color:var(--on-accent);display:inline-flex;align-items:center;gap:8px}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn.small{padding:6px 12px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:default}
+.link{background:none;border:0;padding:0;color:var(--accent);font-weight:600;font-size:13px}
+.chip{display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;background:var(--muted);color:var(--ink-2);font-size:12px;font-weight:500;white-space:nowrap}
+.chip.h{background:var(--haiku-tint);color:var(--haiku)} .chip.s{background:var(--sonnet-tint);color:var(--sonnet)}
+.chip.w{background:var(--warn-tint);color:var(--warn)}
+
+.case{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.case-head{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;justify-content:space-between}
+.case-head .grow{flex:1;min-width:240px;display:flex;flex-direction:column;gap:6px}
+.input{font-size:16px;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.col{min-width:0;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px;background:var(--bg);border:1px solid var(--line)}
+.col-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.col-head b{font-size:14px}
+.col.haiku .col-head b{color:var(--haiku)} .col.sonnet .col-head b{color:var(--sonnet)}
+.empty{color:var(--ink-2);font-size:14px;padding:12px 0}
+.thinking{display:flex;align-items:center;gap:10px;color:var(--ink-2);font-size:14px}
+.dots{display:inline-flex;gap:4px}.dots i{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:p 1.2s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes p{0%,80%,100%{opacity:.2}40%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.dots i{animation:none;opacity:1}}
+.err{background:var(--warn-tint);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:13px}
+
+.chunk{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.chunk.rec{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.zh{font-family:var(--zh);font-size:22px;font-weight:500;line-height:1.4}
+.py{font-size:14px;color:var(--ink-2);font-style:italic;line-height:1.4}
+.nat .zh{font-size:16px;font-weight:400}
+.nat{border-top:1px dashed var(--line);padding-top:6px;display:flex;flex-direction:column;gap:2px}
+.mean{font-size:14px}
+.gp{font-size:13px}.gp b{color:var(--accent)}
+.notes{display:flex;flex-direction:column;gap:4px}
+.note{font-size:13px;display:flex;gap:6px;flex-wrap:wrap;align-items:baseline}
+.note .k{font-family:var(--zh);font-weight:500;font-size:15px}
+.note .t{font-size:11px;padding:0 6px;border-radius:999px;background:var(--muted);color:var(--ink-2)}
+.extra{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;font-size:13px}
+details.raw summary{font-size:12px;color:var(--ink-2);cursor:pointer}
+details.raw pre{font-size:11px;overflow-x:auto;background:var(--surface);border-radius:8px;padding:8px;margin:6px 0 0;max-height:320px}
+.vote{display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:12px}
+.vote button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:13px}
+.vote button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+form.add{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.field{width:100%;border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:10px 12px}
+textarea.field{min-height:80px;resize:vertical}
+.selects{display:flex;flex-wrap:wrap;gap:12px}
+.selects label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink-2)}
+.selects select{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:8px 10px}
+</style>
+
+<main class="wrap">
+  <header class="intro">
+    <p class="eyebrow">DILO・中文語言包 v0.1</p>
+    <h1>Haiku 和 Sonnet，誰教中文教得比較好？</h1>
+    <p class="sub">同一份「學繁體中文」指令，分別交給 Claude Haiku 5.5 和 Sonnet 5.5。測試句模擬你的朋友：母語是英文或西班牙文、程度 A2～B1。每組看完選一個比較好的，上方會統計結果。呼叫用的是你自己的 Claude 帳號額度。</p>
+  </header>
+  <div class="bar">
+    <div class="tally" id="tally"></div>
+    <div class="row" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" id="runAll">全部執行</button>
+      <button class="btn ghost" id="stop" hidden>停止</button>
+    </div>
+  </div>
+  <p class="tiny" id="status"></p>
+  <section id="cases" style="display:flex;flex-direction:column;gap:16px"></section>
+  <form class="add" id="add">
+    <h2 style="font-size:18px">加入自己的測試句</h2>
+    <p class="sub">用朋友可能會寫的話，英文、西文或夾雜中文都可以。</p>
+    <label class="tiny" for="newText">句子</label>
+    <textarea class="field" id="newText" placeholder="Today I met my language exchange partner at a café near Taipei 101."></textarea>
+    <div class="selects">
+      <label for="newLang">母語<select id="newLang"><option value="en">English</option><option value="es">Español</option></select></label>
+      <label for="newLevel">程度<select id="newLevel"><option>A2</option><option>B1</option></select></label>
+      <label for="newSession">時段<select id="newSession"><option value="morning">早上計畫</option><option value="evening">晚上回顧</option></select></label>
+    </div>
+    <div><button class="btn" type="submit">加入並執行</button></div>
+  </form>
+</main>
+
+<script>
+const PROMPT = "你是一位台灣華語的口說教練。學習者的母語是英文或西班牙文，正在學繁體中文，目標是能在和台灣朋友聊天時，把自己生活中的事說出口。\n\n你會收到一段 JSON：\n- `learner_language`：學習者的母語，`en` 或 `es`。\n- `level`：`A2` 或 `B1`。\n- `session`：`morning`（早上計畫）、`evening`（晚上回顧）或 `post_call`（聊天後回顧）。\n- `written_at`：寫下的時間（含時區）。\n- `user_text`：學習者寫的一段話，可能是英文、西班牙文、寫錯的中文，或混在一起。\n- `people`：學習者設定過的人物清單。\n\n請把它轉成學習者能理解、也能練習說出口的中文，並**只回傳符合指定格式的 JSON**，不要有任何其他文字。\n\n### 1. 語言與地區\n\n- 一律使用**台灣華語**和**繁體字**，用台灣人日常會說的詞。\n  - 例：腳踏車（不是自行車）、計程車（不是出租車）、捷運、便利商店、公車、機車、垃圾、影片（不是視頻）、品質（不是質量）。\n- 拼音使用**漢語拼音加聲調符號**，以「詞」為單位分開寫，句首大寫，保留標點：`Wǒ jīntiān yào zài jiā shàngbān.`\n  - 聲調標本調；只有「一」和「不」標實際讀音（`bú shì`、`yí ge`、`yì bēi`）；三聲連讀不改標（`nǐ hǎo`）。\n  - 台灣讀音和大陸不同時，用台灣讀音：星期 `xīngqí`、垃圾 `lèsè`、企業 `qìyè`、頭髮 `tóufǎ`。\n  - 輕聲不標調號（`de`、`le`、`ge`、`men`）。\n\n### 2. 解釋的語言\n\n- 所有給學習者看的說明（`meaning`、`grammar_point`、`notes.explain`、`corrections.why`、`questions`、`culture_explanations.explain`）都用 `learner_language`：\n  - `en`：簡單、口語的英文。\n  - `es`：簡單、口語的西班牙文，用「tú」。\n- 說明要短，像朋友在旁邊提醒，不要堆文法術語。\n\n### 3. 依程度調整（最重要）\n\n| 程度 | 簡單版 `simple` | 自然版 `natural` |\n| --- | --- | --- |\n| A2 | 每句最多約 15 個字；只用最常見的詞；一個意思一句；不用把字句和複雜連接詞 | 台灣人會怎麼說，可以稍長 |\n| B1 | 每句最多約 25 個字；可以用「因為…所以」「雖然…但是」「了／過」「本來…」 | 自然口語，可以有慣用說法 |\n\n- 簡單版必須文法正確、自然，不能為了簡單而寫成中式英文或西文。\n- 自然版是台灣朋友聊天時真的會說的話（例：「我今天在家上班」比「我今天在家工作」更常見）。\n\n### 4. 時間與動作（中文沒有時態）\n\n中文不用動詞變化表示時間，要靠**時間詞**和**少數助詞**。依照內容是什麼時候，對照 `written_at` 和 `session` 判斷：\n\n| 情況 | 怎麼說 | 例子 |\n| --- | --- | --- |\n| 今天打算做的事 | 時間詞 + 要／會／打算 | 我今天要在家上班。 |\n| 已經完成、有數量或結果的動作 | 動詞 + 了 | 我買了三個蘋果。 |\n| 狀態改變 | 句尾 了 | 下雨了。 |\n| 做過的經驗 | 動詞 + 過 | 我沒去過九份。 |\n| 正在進行 | 在 + 動詞 | 我在吃飯。 |\n| 本來想要 | 本來想／本來要 | 我本來想去夜市。 |\n\n- **時間詞放在動詞前面**，通常在句首或主詞後：「我今天晚上要去健身房」，不是「我要去健身房今天晚上」。\n- **不要每個過去的句子都加「了」**：描述狀態（「今天好累」）、習慣、或沒有數量的單純敘述，常常不用「了」。\n- 在 `grammar_point` 用一句話說明這句的重點，以及為什麼這樣說。\n\n### 5. 量詞\n\n- 名詞前有數字或「這／那／每」時，一定要用正確的量詞：一**杯**咖啡、一**碗**芋圓、三**個**蘋果、一**瓶**牛奶、一**台**機車、一**班**公車、一**部**電影。\n- 學習者用錯或沒用量詞時，在句子裡直接用對的，並在 `notes` 用 `measure_word` 說明。\n- 如果原文的量詞跟中文習慣不同（例：英文說 a cup of taro balls，台灣說「一碗芋圓」），用台灣的習慣說法，並在 note 提醒。\n\n### 6. 拆成句塊\n\n- 把輸入拆成數個**句塊（chunk）**，每個是一個能單獨說出口的意思，最多 6 個。\n- 不要合併成一個長句，也不要補上輸入裡沒有的內容（不加心情、細節、地點）。\n- 每個句塊標上對話動作 `conversation_action`：\n  - `say_today`：說自己做了或要做什麼\n  - `say_place`：說在哪裡、跟誰在一起\n  - `ask_other`：問對方\n  - `react`：對別人的話做出反應\n\n### 7. 練習推薦\n\n- 從句塊中挑 **1～2 個**最值得練習的，放在 `recommended_for_practice`。\n- 優先挑：聊天時最常用、句型最能重複使用的句子。\n- 每個句塊給 `practice_priority`：1（最優先）到 3（可跳過）。\n\n### 8. 註解\n\n- 每個句塊的 `notes` 最多 3 則，挑學習者最可能不會的。\n- 每則都要有中文 `zh`、拼音 `pinyin` 和用母語寫的 `explain`。\n- `type` 只能是：`vocab`（單字）、`grammar`（句型）、`measure_word`（量詞）、`taiwan_usage`（台灣特有說法或讀音）、`culture`（文化）。\n\n### 9. 學習者寫了中文時\n\n- 如果 `user_text` 裡有中文，在 `corrections` 列出需要修正的地方：原本的寫法、修正後的寫法、修正後的拼音、一句用母語寫的說明。\n- 語氣友善，只說「這樣說會更自然」，不要用「錯誤」這類字眼。\n- 寫對的部分不需要列出。\n\n### 10. 人物\n\n- `people` 裡的人，一律照清單的中文說法和代名詞（他／她）。\n- 遇到清單裡沒有、而且句子需要用到「他／她」的人：\n  1. 先用「他」寫出句子。\n  2. 在 `questions` 加一題，用母語問這個人是男生還是女生，`options` 給出兩種中文寫法，並說明「他／她」讀音一樣、只有寫法不同。\n  3. 在 `new_people` 加入這個人，`pronoun` 填 `unknown`。\n- 不要自行猜測性別。\n\n### 11. 文化詞\n\n- 學習者提到自己國家的食物、地點、節日（例：paella、tapas、Thanksgiving），用台灣常見的中文說法（西班牙海鮮飯、感恩節）；沒有通用說法時保留原文。\n- 在 `culture_explanations` 附上一句**向台灣朋友解釋**的簡單中文、拼音和母語意思。\n- 學習者提到台灣的東西（夜市、珍奶、芋圓）時，用正確的台灣說法，必要時在 notes 用 `culture` 說明。\n\n### 12. 不要做的事\n\n- 不要回傳 JSON 以外的任何文字。\n- 不要使用簡體字或大陸用語。\n- 不要加入使用者沒說的事實、心情或細節。\n- 不要把多個句塊合成一個段落。";
+const FORMAT = `回傳格式：只回傳下面這個 JSON 物件，欄位都要有（沒有內容就給空陣列）。說明類欄位用 learner_language 寫。
+{"input_language":"en|es|zh|mixed","time_reference":"plan_today|today|yesterday_or_before|mixed",
+"chunks":[{"id":"c1","source":"對應的原文","natural":"自然版中文","natural_pinyin":"","simple":"簡單版中文","simple_pinyin":"","meaning":"母語意思",
+"conversation_action":"say_today|say_place|ask_other|react","grammar_point":{"name":"重點名稱（母語）","why":"一句話說明（母語）"},
+"notes":[{"type":"vocab|grammar|measure_word|taiwan_usage|culture","zh":"","pinyin":"","explain":"母語說明"}],"practice_priority":1}],
+"recommended_for_practice":["c1"],
+"corrections":[{"original":"","corrected":"","corrected_pinyin":"","why":""}],
+"questions":[{"id":"q1","about":"person_pronoun","person_label":"","question":"","options":[{"label":"","zh":"他","pronoun":"他"},{"label":"","zh":"她","pronoun":"她"}]}],
+"new_people":[{"label":"","zh":"","pronoun":"他|她|unknown"}],
+"culture_explanations":[{"term":"","zh":"","pinyin":"","explain":""}]}`;
+
+const MODELS = [
+  { key: "haiku", id: "claude-haiku-5-5", name: "Haiku 5.5", tier: "quick" },
+  { key: "sonnet", id: "claude-sonnet-5-5", name: "Sonnet 5.5", tier: "default" },
+];
+const BASE_CASES = [
+  { id: "t1", lang: "en", level: "A2", session: "morning", text: "Today I'm going to work from home, and in the evening I'll go to the gym.", focus: "要／時間詞位置" },
+  { id: "t2", lang: "en", level: "B1", session: "evening", text: "I wanted to go to the night market with my coworkers, but it rained, so we ordered bubble tea and stayed at the office until 8.", focus: "本來想、因為所以、台灣文化詞" },
+  { id: "t3", lang: "es", level: "A2", session: "morning", text: "Hoy voy a comprar fruta en el mercado y después voy a llamar a mi madre.", focus: "西文解釋、簡單句" },
+  { id: "t4", lang: "es", level: "B1", session: "evening", text: "Esta tarde he tomado un café con una amiga taiwanesa y me ha enseñado a pedir comida en chino.", focus: "了、人物代名詞" },
+  { id: "t5", lang: "en", level: "A2", session: "evening", text: "我今天去了超市，買三個蘋果和一瓶牛奶。我很累了。", focus: "修正學習者寫的中文" },
+  { id: "t6", lang: "es", level: "B1", session: "morning", text: "Mañana voy a 台南 con mi 男朋友 para comer 牛肉湯, pero no sé cuánto tiempo tarda el tren.", focus: "中西夾雜、明天的計畫" },
+  { id: "t7", lang: "en", level: "B1", session: "evening", text: "I had never been to Jiufen before. Today I took two buses to get there and bought a cup of taro balls.", focus: "過、量詞（班、碗）" },
+  { id: "t8", lang: "en", level: "A2", session: "evening", text: "My friend helped me fix my bike today. Then we watched a movie and I cooked paella for him.", focus: "他／她、腳踏車、文化詞 paella" },
+];
+const LANGS = { en: "English", es: "Español" };
+const SESSIONS = { morning: "早上計畫", evening: "晚上回顧", post_call: "聊天後" };
+const STORE = "dilo.zh-compare.v1";
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+let saved = { custom: [], votes: {} };
+try { const raw = localStorage.getItem(STORE); if (raw) saved = Object.assign(saved, JSON.parse(raw)); } catch (e) {}
+const persist = () => { try { localStorage.setItem(STORE, JSON.stringify(saved)); } catch (e) {} };
+const cases = () => [...BASE_CASES, ...saved.custom];
+const results = {}; // `${caseId}:${model}` -> {state, data, ms, applied, error, raw}
+let ctl = null, running = false, aiOff = false;
+
+let samplePromise = null;
+const getSample = () => samplePromise || (samplePromise = (window.claude && claude.use) ? claude.use("sample").catch(() => null) : Promise.resolve(null));
+
+function writtenAt(session) {
+  const d = new Date(), pad = n => String(n).padStart(2, "0");
+  d.setHours(session === "morning" ? 10 : 21, 15, 0);
+  const o = -d.getTimezoneOffset(), sign = o >= 0 ? "+" : "-";
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:00${sign}${pad(Math.floor(Math.abs(o) / 60))}:${pad(Math.abs(o) % 60)}`;
+}
+function buildInput(c) {
+  return `${PROMPT}\n\n${FORMAT}\n\n這次的輸入：\n${JSON.stringify({ learner_language: c.lang, level: c.level, session: c.session, written_at: writtenAt(c.session), user_text: c.text, people: [] })}`;
+}
+function parseJSON(text) {
+  let t = String(text || "").trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/, "");
+  const a = t.indexOf("{"), b = t.lastIndexOf("}");
+  if (a < 0 || b <= a) throw new Error("no json");
+  return JSON.parse(t.slice(a, b + 1));
+}
+function errorText(e) {
+  switch (e && e.code) {
+    case "cancelled": return "已停止。";
+    case "not_granted": case "sampling_disabled": case "not_declared": case "capability_disabled": aiOff = true; return "這裡沒辦法使用 Claude。請在 claude.ai 登入後打開這個頁面，並允許它使用 Claude。";
+    case "rate_limited": return "使用量暫時到上限了，晚一點再試。";
+    case "session_expired": return "請重新登入 Claude。";
+    case "parse": return "回傳的內容不是完整的 JSON，可以再跑一次。";
+    default: return "連線出了點問題，請再試一次。";
+  }
+}
+
+async function runOne(c, m) {
+  const key = `${c.id}:${m.key}`;
+  const sample = await getSample();
+  if (!sample) { aiOff = true; results[key] = { state: "error", error: errorText({ code: "not_granted" }) }; render(); return; }
+  results[key] = { state: "loading" }; render();
+  const t0 = performance.now();
+  try {
+    const r = await sample(buildInput(c), { model: m.id, modelTier: m.tier, signal: ctl ? ctl.signal : undefined });
+    let data;
+    try { data = parseJSON(r.text); } catch (e) { results[key] = { state: "error", error: errorText({ code: "parse" }), raw: r.text }; render(); return; }
+    results[key] = { state: "done", data, ms: performance.now() - t0, applied: r.modelApplied || null, tier: r.modelTierApplied, truncated: r.truncated, raw: r.text };
+  } catch (e) {
+    results[key] = { state: "error", error: errorText(e) };
+  }
+  render();
+}
+async function runCase(c) { await Promise.all(MODELS.map(m => runOne(c, m))); }
+async function runAll() {
+  if (running) return;
+  running = true; ctl = new AbortController(); render();
+  for (const c of cases()) {
+    if (ctl.signal.aborted || aiOff) break;
+    const done = MODELS.every(m => (results[`${c.id}:${m.key}`] || {}).state === "done");
+    if (!done) await runCase(c);
+  }
+  running = false; ctl = null; render();
+}
+
+/* ---------- rendering ---------- */
+const arr = v => Array.isArray(v) ? v : [];
+function resultHTML(c, m) {
+  const r = results[`${c.id}:${m.key}`];
+  const label = m.key === "haiku" ? "h" : "s";
+  let head = `<div class="col-head"><b>${m.name}</b>`;
+  if (r && r.state === "done") {
+    const fell = !r.applied;
+    head += `<span class="row" style="display:flex;gap:6px;align-items:center">${fell ? `<span class="chip w" title="指定的模型沒有回答，改由 ${esc(r.tier)} 層級回答">改用 ${esc(r.tier)}</span>` : ""}<span class="tiny">${(r.ms / 1000).toFixed(1)} 秒</span></span>`;
+  }
+  head += `</div>`;
+  if (!r) return `<div class="col ${m.key}">${head}<p class="empty">還沒執行</p></div>`;
+  if (r.state === "loading") return `<div class="col ${m.key}">${head}<div class="thinking"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>產生中…</div></div>`;
+  if (r.state === "error") return `<div class="col ${m.key}">${head}<div class="err">${esc(r.error)}</div>${r.raw ? `<details class="raw"><summary>原始回傳</summary><pre>${esc(r.raw)}</pre></details>` : ""}</div>`;
+  const d = r.data, rec = new Set(arr(d.recommended_for_practice).map(String));
+  let h = `<div class="col ${m.key}">${head}`;
+  if (r.truncated) h += `<div class="err">回答被截斷了，內容可能不完整。</div>`;
+  for (const q of arr(d.questions)) h += `<div class="extra"><b>${esc(q.question)}</b><div class="chips">${arr(q.options).map(o => `<span class="chip">${esc(o.label)}：<span style="font-family:var(--zh)">${esc(o.zh)}</span></span>`).join("")}</div></div>`;
+  if (arr(d.corrections).length) h += `<div class="extra"><span class="eyebrow">修正</span>${arr(d.corrections).map(x => `<div><s>${esc(x.original)}</s> → <span class="zh" style="font-size:16px">${esc(x.corrected)}</span><div class="py">${esc(x.corrected_pinyin)}</div><div>${esc(x.why)}</div></div>`).join("")}</div>`;
+  for (const ch of arr(d.chunks)) {
+    const gp = ch.grammar_point || {};
+    h += `<article class="chunk ${rec.has(String(ch.id)) ? "rec" : ""}">
+      ${rec.has(String(ch.id)) ? '<span class="chip" style="align-self:flex-start;background:var(--accent-tint);color:var(--accent)">推薦練習</span>' : ""}
+      <p class="zh">${esc(ch.simple)}</p><p class="py">${esc(ch.simple_pinyin)}</p>
+      ${ch.natural && ch.natural !== ch.simple ? `<div class="nat"><span class="tiny">自然版</span><p class="zh">${esc(ch.natural)}</p><p class="py">${esc(ch.natural_pinyin)}</p></div>` : ""}
+      <p class="mean">${esc(ch.meaning)}</p>
+      ${gp.name ? `<p class="gp"><b>${esc(gp.name)}</b>　${esc(gp.why)}</p>` : ""}
+      ${arr(ch.notes).length ? `<div class="notes">${arr(ch.notes).map(n => `<div class="note"><span class="t">${esc(n.type)}</span><span class="k">${esc(n.zh)}</span><span class="py" style="font-size:12px">${esc(n.pinyin)}</span><span>${esc(n.explain)}</span></div>`).join("")}</div>` : ""}
+    </article>`;
+  }
+  for (const x of arr(d.culture_explanations)) h += `<div class="extra"><span class="eyebrow">怎麼跟台灣朋友解釋「${esc(x.term)}」</span><span class="zh" style="font-size:16px">${esc(x.zh)}</span><span class="py">${esc(x.pinyin)}</span><span>${esc(x.explain)}</span></div>`;
+  h += `<details class="raw"><summary>原始 JSON</summary><pre>${esc(JSON.stringify(d, null, 2))}</pre></details></div>`;
+  return h;
+}
+function caseHTML(c) {
+  const v = saved.votes[c.id], busy = MODELS.some(m => (results[`${c.id}:${m.key}`] || {}).state === "loading");
+  const both = MODELS.every(m => (results[`${c.id}:${m.key}`] || {}).state === "done");
+  return `<article class="case" id="case-${esc(c.id)}">
+    <div class="case-head"><div class="grow">
+      <p class="input">${esc(c.text)}</p>
+      <div class="chips"><span class="chip">${LANGS[c.lang]}</span><span class="chip">${esc(c.level)}</span><span class="chip">${SESSIONS[c.session]}</span>${c.focus ? `<span class="chip" style="background:var(--accent-tint);color:var(--accent)">看重點：${esc(c.focus)}</span>` : ""}</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      ${c.custom ? `<button class="link" data-del="${esc(c.id)}" style="color:var(--ink-2)">刪除</button>` : ""}
+      <button class="btn small ${both ? "ghost" : ""}" data-run="${esc(c.id)}" ${busy || aiOff ? "disabled" : ""}>${both ? "重跑" : "執行"}</button>
+    </div></div>
+    <div class="cols">${MODELS.map(m => resultHTML(c, m)).join("")}</div>
+    ${both ? `<div class="vote" role="group" aria-label="哪個比較好"><span class="tiny">哪個比較好？</span>
+      ${[["haiku", "Haiku"], ["tie", "差不多"], ["sonnet", "Sonnet"]].map(([k, l]) => `<button data-vote="${esc(c.id)}:${k}" aria-pressed="${v === k}">${l}</button>`).join("")}</div>` : ""}
+  </article>`;
+}
+function render() {
+  const all = cases(), votes = all.map(c => saved.votes[c.id]).filter(Boolean);
+  const n = k => votes.filter(v => v === k).length;
+  document.getElementById("tally").innerHTML =
+    `<span><span class="chip h">Haiku 比較好</span> <b>${n("haiku")}</b></span><span><span class="chip">差不多</span> <b>${n("tie")}</b></span><span><span class="chip s">Sonnet 比較好</span> <b>${n("sonnet")}</b></span><span class="tiny" style="align-self:center">已評 ${votes.length} / ${all.length} 組</span>`;
+  document.getElementById("runAll").disabled = running || aiOff;
+  document.getElementById("runAll").textContent = running ? "執行中…" : "全部執行";
+  document.getElementById("stop").hidden = !running;
+  const doneCount = all.filter(c => MODELS.every(m => (results[`${c.id}:${m.key}`] || {}).state === "done")).length;
+  document.getElementById("status").textContent = aiOff
+    ? "這裡沒辦法使用 Claude：請在 claude.ai 登入後打開這個頁面。"
+    : `完成 ${doneCount} / ${all.length} 組。每組會同時呼叫兩個模型，約 10～60 秒；第一次執行時會請你允許這個頁面使用 Claude。`;
+  document.getElementById("cases").innerHTML = all.map(caseHTML).join("");
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const d = b.dataset;
+  if (b.id === "runAll") { runAll(); return; }
+  if (b.id === "stop") { if (ctl) ctl.abort(); return; }
+  if (d.run) { const c = cases().find(x => x.id === d.run); if (c) { if (!ctl) ctl = new AbortController(); runCase(c).then(() => { if (!running) ctl = null; }); } return; }
+  if (d.vote) { const i = d.vote.lastIndexOf(":"), id = d.vote.slice(0, i), k = d.vote.slice(i + 1); saved.votes[id] = saved.votes[id] === k ? undefined : k; persist(); render(); return; }
+  if (d.del) { saved.custom = saved.custom.filter(c => c.id !== d.del); delete saved.votes[d.del]; persist(); render(); return; }
+});
+document.getElementById("add").addEventListener("submit", e => {
+  e.preventDefault();
+  const text = document.getElementById("newText").value.trim(); if (!text) return;
+  const c = { id: "u" + Date.now().toString(36), custom: true, text, lang: document.getElementById("newLang").value, level: document.getElementById("newLevel").value, session: document.getElementById("newSession").value };
+  saved.custom.push(c); persist(); document.getElementById("newText").value = ""; render();
+  if (!aiOff) { if (!ctl) ctl = new AbortController(); runCase(c).then(() => { if (!running) ctl = null; }); }
+  const el = document.getElementById("case-" + c.id); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+render();
+getSample().then(s => { if (!s) { aiOff = true; render(); } });
+</script>
