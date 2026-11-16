@@ -12,8 +12,9 @@ import type { ConvertInput, ConvertResponse } from "./types";
  * 模擬模式下改用 mock.ts 的範例資料（見 mode.ts）。
  */
 
-// 預設用 Sonnet 5.5：速度和品質的平衡最好。想換模型時在 .env.local 設定 CLAUDE_MODEL。
-const MODEL = process.env.CLAUDE_MODEL ?? "claude-sonnet-5-5";
+// 預設用 Haiku 5.5：2026-11-16 的 Haiku／Sonnet 比較測試中，指令改清楚後兩者品質差不多，Haiku 便宜約 20 倍。
+// 想換回 Sonnet 時，在 .env.local（或 Vercel 環境變數）設定 CLAUDE_MODEL=claude-sonnet-5-5。
+const MODEL = process.env.CLAUDE_MODEL ?? "claude-haiku-5-5";
 
 // JSON Schema 檔案頂端的 $schema、title、description 是給人看的，送給 API 前拿掉。
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

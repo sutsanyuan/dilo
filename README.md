@@ -69,7 +69,7 @@ LINE Seed TW 加入步驟：
 
 - 指令：`src/lib/ai/convert-prompt.ts`
 - 格式：`src/lib/ai/types.ts`（TypeScript）、`src/lib/ai/schemas/response.schema.json`（送給 API 強制回傳格式）
-- 呼叫 Claude：`src/lib/ai/convert.ts`，預設模型 `claude-sonnet-5-5`，可用環境變數 `CLAUDE_MODEL` 更換
+- 呼叫 Claude：`src/lib/ai/convert.ts`，預設模型 `claude-haiku-5-5`（比較測試見 `prototype/zh-tw-compare.html`），可用環境變數 `CLAUDE_MODEL` 換成 `claude-sonnet-5-5`
 - API：`POST /api/convert`（`src/app/api/convert/route.ts`）
 - 測試頁：http://localhost:3000/try ，輸入句子看 AI 的轉換結果；遇到新人物會詢問性別，答案存在瀏覽器裡
 
