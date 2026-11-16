@@ -19,26 +19,33 @@ npm run dev
 
 ## 專案結構
 
+程式碼直接放在專案根目錄（沒有 `src/` 資料夾），和台灣景點網站、貓有煮意相同。`@/` 指向專案根目錄。
+
 ```
-src/
+dilo/
 ├─ app/
-│  ├─ layout.tsx         根版面：載入字體、設定語言
-│  ├─ globals.css        全站基礎樣式
-│  ├─ page.tsx           首頁（目前是靜態骨架）
-│  └─ page.module.css
+│  ├─ layout.tsx            根版面：載入字體、設定語言
+│  ├─ globals.css           全站基礎樣式
+│  ├─ page.tsx              首頁（目前是靜態骨架）
+│  ├─ try/                  AI 轉換測試頁
+│  └─ api/convert/route.ts  POST /api/convert
 ├─ styles/
-│  └─ tokens.css         設計變數：顏色、間距、圓角、字體（對應 Figma 的 Tokens）
-└─ lib/
-   └─ ai/
-      ├─ convert-prompt.ts  AI 句子轉換指令（system prompt）
-      ├─ types.ts           輸入與回傳的 TypeScript 型別
-      ├─ schemas/           同樣的格式，JSON Schema 版本
-      └─ examples/          兩組範例：早上計畫、晚上回顧
+│  └─ tokens.css            設計變數：顏色、間距、圓角、字體（對應 Figma 的 Tokens）
+├─ lib/
+│  └─ ai/
+│     ├─ convert-prompt.ts  AI 句子轉換指令（system prompt）
+│     ├─ convert.ts         呼叫 Claude、錯誤訊息
+│     ├─ mode.ts、mock.ts   模擬模式
+│     ├─ types.ts           輸入與回傳的 TypeScript 型別
+│     ├─ schemas/           同樣的格式，JSON Schema 版本
+│     └─ examples/          兩組範例：早上計畫、晚上回顧
+├─ docs/language-packs/     各語言的 AI 指令草稿（中文語言包等）
+└─ prototype/               claude.ai artifact 原型與比較頁
 ```
 
 ## 設計變數
 
-`src/styles/tokens.css` 的命名和 Figma 變數一致，Figma 的 `color/accent-strong` 對應 CSS 的 `--color-accent-strong`。在 CSS 裡這樣用：
+`styles/tokens.css` 的命名和 Figma 變數一致，Figma 的 `color/accent-strong` 對應 CSS 的 `--color-accent-strong`。在 CSS 裡這樣用：
 
 ```css
 .button {
@@ -60,24 +67,24 @@ LINE Seed TW 加入步驟：
 
 1. 到 [LINE Seed 官網](https://seed.line.me/index_tw.html) 確認網頁嵌入的授權條款。
 2. 中文字體檔很大，先做子集化（只保留常用字），轉成 `.woff2`。
-3. 放進 `src/fonts/`，在 `layout.tsx` 用 `next/font/local` 載入，變數名稱設為 `--font-line-seed`。
+3. 放進 `fonts/`，在 `layout.tsx` 用 `next/font/local` 載入，變數名稱設為 `--font-line-seed`。
 4. 把 `tokens.css` 裡 `--font-ui` 的 `"LINE Seed TW"` 換成 `var(--font-line-seed)`。
 
 在那之前，中文會使用 iPhone 的蘋方或 Noto Sans TC。
 
 ## AI 句子轉換
 
-- 指令：`src/lib/ai/convert-prompt.ts`
-- 格式：`src/lib/ai/types.ts`（TypeScript）、`src/lib/ai/schemas/response.schema.json`（送給 API 強制回傳格式）
-- 呼叫 Claude：`src/lib/ai/convert.ts`，預設模型 `claude-haiku-5-5`（比較測試見 `prototype/zh-tw-compare.html`），可用環境變數 `CLAUDE_MODEL` 換成 `claude-sonnet-5-5`
-- API：`POST /api/convert`（`src/app/api/convert/route.ts`）
+- 指令：`lib/ai/convert-prompt.ts`
+- 格式：`lib/ai/types.ts`（TypeScript）、`lib/ai/schemas/response.schema.json`（送給 API 強制回傳格式）
+- 呼叫 Claude：`lib/ai/convert.ts`，預設模型 `claude-haiku-5-5`（比較測試見 `prototype/zh-tw-compare.html`），可用環境變數 `CLAUDE_MODEL` 換成 `claude-sonnet-5-5`
+- API：`POST /api/convert`（`app/api/convert/route.ts`）
 - 測試頁：http://localhost:3000/try ，輸入句子看 AI 的轉換結果；遇到新人物會詢問性別，答案存在瀏覽器裡
 
 ### 模擬模式（還沒儲值也能開發）
 
-沒有設定 `ANTHROPIC_API_KEY` 時，`/api/convert` 會自動進入**模擬模式**：不呼叫 Claude，改回傳 `src/lib/ai/examples/` 的範例資料（早上一組、晚上一組），並延遲約一秒模擬思考。人物問答也會模擬：回答過的人不會再被問。
+沒有設定 `ANTHROPIC_API_KEY` 時，`/api/convert` 會自動進入**模擬模式**：不呼叫 Claude，改回傳 `lib/ai/examples/` 的範例資料（早上一組、晚上一組），並延遲約一秒模擬思考。人物問答也會模擬：回答過的人不會再被問。
 
-- 判斷邏輯：`src/lib/ai/mode.ts`；範例回傳：`src/lib/ai/mock.ts`
+- 判斷邏輯：`lib/ai/mode.ts`；範例回傳：`lib/ai/mock.ts`
 - 想在有金鑰時也用模擬模式（例如作品集的展示模式），在 `.env.local` 設 `AI_MODE=mock`
 - API 回應的 `x-dilo-ai-mode` 標頭會是 `live` 或 `mock`
 

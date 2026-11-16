@@ -6,7 +6,7 @@ import type { ConvertInput, Person, Session } from "@/lib/ai/types";
  * POST /api/convert
  * 前端送來使用者的一段話，回傳 AI 轉換結果（ConvertResponse）。
  *
- * 沒有 ANTHROPIC_API_KEY 時自動進入模擬模式，回傳範例資料（見 src/lib/ai/mode.ts）。
+ * 沒有 ANTHROPIC_API_KEY 時自動進入模擬模式，回傳範例資料（見 lib/ai/mode.ts）。
  * 回應的 x-dilo-ai-mode 標頭會告訴前端現在是 live 還是 mock。
  *
  * 注意：目前沒有登入機制，任何人知道網址都能呼叫並花到你的 API 額度。
