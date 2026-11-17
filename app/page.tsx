@@ -10,10 +10,20 @@ import { getT } from "@/lib/i18n/t";
 export default async function Home() {
     const locale = await getLocale();
     const t = await getT(locale);
+    // 依語言格式化今天的日期，例如：
+    // zh-TW → 11月17日 星期二
+    // en    → Tuesday, November 17
+    // es    → martes, 17 de noviembre
+    const today = new Intl.DateTimeFormat(locale, {
+        weekday: "long", // 星期幾，寫完整（星期二、Tuesday）
+        month: "long", // 月份，寫完整（11月、November）
+        day: "numeric", // 日期，數字
+        timeZone: "Asia/Taipei",
+    }).format(new Date());
     return (
         <main className={styles.screen}>
             <header className={styles.header}>
-                <p className={styles.date}>11月4日 星期三</p>
+                <p className={styles.date}>{today}</p>
                 <h1 className={`spanish ${styles.greeting}`}>Buenos días, Tsan</h1>
             </header>
 
