@@ -7,6 +7,10 @@ export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = "zh-TW";
 
+// 記住使用者選了哪個語言的 cookie 名稱。
+// 讀（getLocale）和寫（之後的語言切換按鈕）都用這個常數，名稱只寫在這裡，不會打錯。
+export const localeCookie = "dilo-locale";
+
 // cookie 裡存的語言是任意字串（可能被改過或是舊的值），用這個檢查是不是我們支援的。
 // 回傳型別 `value is Locale` 讓 TypeScript 在 if 判斷後把 value 當成 Locale。
 export function isLocale(value: string): value is Locale {
