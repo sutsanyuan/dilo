@@ -2,6 +2,7 @@ import styles from "./page.module.css";
 import { getLocale } from "@/lib/i18n/locale";
 import { getT } from "@/lib/i18n/t";
 import { connection } from "next/server";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 // 和 layout.tsx 一樣：這頁依每個人的語言和當下日期產生，不需要事先做固定版本
 export const instant = false;
@@ -30,6 +31,7 @@ export default async function Home() {
     return (
         <main className={styles.screen}>
             <header className={styles.header}>
+                <LanguageSwitcher current={locale} />
                 <p className={styles.date}>{today}</p>
                 <h1 className={`spanish ${styles.greeting}`}>Buenos días, Tsan</h1>
             </header>
