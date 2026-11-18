@@ -1,6 +1,10 @@
 import styles from "./page.module.css";
 import { getLocale } from "@/lib/i18n/locale";
 import { getT } from "@/lib/i18n/t";
+import { connection } from "next/server";
+
+// 和 layout.tsx 一樣：這頁依每個人的語言和當下日期產生，不需要事先做固定版本
+export const instant = false;
 
 /**
  * 首頁（第一版骨架）
@@ -14,6 +18,9 @@ export default async function Home() {
     // zh-TW → 11月17日 星期二
     // en    → Tuesday, November 17
     // es    → martes, 17 de noviembre
+
+    // 告訴 Next.js：這頁要等使用者打開時才產生，日期才會是當下的日期
+    await connection();
     const today = new Intl.DateTimeFormat(locale, {
         weekday: "long", // 星期幾，寫完整（星期二、Tuesday）
         month: "long", // 月份，寫完整（11月、November）

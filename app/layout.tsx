@@ -19,6 +19,7 @@ const newsreader = Newsreader({
     style: ["normal", "italic"],
 });
 
+export const instant = false;
 // 每次打開頁面時執行，依使用者的語言產生標題和說明
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getT(await getLocale());
