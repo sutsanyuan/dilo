@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Dilo",
+    "description": "Una frase al día para contar tu vida en voz alta."
+  },
+  "home": {
+    "morning": {
+      "label": "La frase de hoy",
+      "title": "Mañana · ¿Qué vas a hacer hoy?",
+      "start": "Empezar"
+    },
+    "evening": {
+      "label": "Repaso de la noche",
+      "title": "Noche · ¿Qué has hecho hoy?",
+      "hint": "Usaremos tus frases de esta mañana. Solo tienes que confirmarlas o cambiarlas."
+    },
+    "review": {
+      "label": "Antes de tu próxima videollamada",
+      "title": "Repasa rápido tus frases recientes y tus reacciones",
+      "start": "Empezar repaso"
+    },
+    "status": {
+      "todo": "Pendiente",
+      "bonus": "Extra"
+    },
+    "goal": "Con hacerlo una vez, por la mañana o por la noche, ya cumples el objetivo de hoy."
+  }
+}

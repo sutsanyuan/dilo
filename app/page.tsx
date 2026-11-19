@@ -1,47 +1,75 @@
 import styles from "./page.module.css";
+import { getLocale } from "@/lib/i18n/locale";
+import { getT } from "@/lib/i18n/t";
+import { connection } from "next/server";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+
+// 和 layout.tsx 一樣：這頁依每個人的語言和當下日期產生，不需要事先做固定版本
+export const instant = false;
 
 /**
  * 首頁（第一版骨架）
  * 目前是靜態畫面，用來確認字體和設計變數都正確套用。
  * 之後會接上真實資料：今天的一句是否完成、最近的句子等。
  */
-export default function Home() {
-  return (
-    <main className={styles.screen}>
-      <header className={styles.header}>
-        <p className={styles.date}>11月4日 星期三</p>
-        <h1 className={`spanish ${styles.greeting}`}>Buenos días, Tsan</h1>
-      </header>
+export default async function Home() {
+    const locale = await getLocale();
+    const t = await getT(locale);
+    // 依語言格式化今天的日期，例如：
+    // zh-TW → 11月17日 星期二
+    // en    → Tuesday, November 17
+    // es    → martes, 17 de noviembre
 
-      <section className={styles.card}>
-        <div className={styles.cardTop}>
-          <span className={styles.eyebrow}>今天的一句</span>
-          <span className={`${styles.chip} ${styles.chipAccent}`}>未完成</span>
-        </div>
-        <h2 className={styles.cardTitle}>早上 · 今天打算做什麼？</h2>
-        <button className={styles.buttonPrimary} type="button">
-          開始
-        </button>
-      </section>
+    // 告訴 Next.js：這頁要等使用者打開時才產生，日期才會是當下的日期
+    await connection();
+    const today = new Intl.DateTimeFormat(locale, {
+        weekday: "long", // 星期幾，寫完整（星期二、Tuesday）
+        month: "long", // 月份，寫完整（11月、November）
+        day: "numeric", // 日期，數字
+        timeZone: "Asia/Taipei",
+    }).format(new Date());
+    return (
+        <main className={styles.screen}>
+            <header className={styles.header}>
+                <div className={styles.headerTop}>
+                    <p className={styles.date}>{today}</p>
+                    <LanguageSwitcher current={locale} />
+                </div>
 
-      <section className={styles.card}>
-        <div className={styles.cardTop}>
-          <span className={styles.eyebrow}>晚上回顧</span>
-          <span className={styles.chip}>加分</span>
-        </div>
-        <h2 className={styles.cardTitle}>晚上 · 今天做了什麼？</h2>
-        <p className={styles.secondary}>會用早上的句子幫你回顧，只要確認或修改</p>
-      </section>
+                <h1 className={`spanish ${styles.greeting}`}>Buenos días, Tsan</h1>
+            </header>
 
-      <section className={styles.card}>
-        <span className={styles.eyebrow}>下次視訊前</span>
-        <h2 className={styles.cardTitleSmall}>快速複習最近的句子和反應短句</h2>
-        <button className={styles.buttonSecondary} type="button">
-          開始複習
-        </button>
-      </section>
+            <section className={styles.card}>
+                <div className={styles.cardTop}>
+                    <span className={styles.eyebrow}>{t("home.morning.label")}</span>
+                    <span className={`${styles.chip} ${styles.chipAccent}`}>
+                        {t("home.status.todo")}
+                    </span>
+                </div>
+                <h2 className={styles.cardTitle}>{t("home.morning.title")}</h2>
+                <button className={styles.buttonPrimary} type="button">
+                    {t("home.morning.start")}
+                </button>
+            </section>
 
-      <p className={styles.footnote}>早上或晚上完成一次，就算達成今天的目標</p>
-    </main>
-  );
+            <section className={styles.card}>
+                <div className={styles.cardTop}>
+                    <span className={styles.eyebrow}>{t("home.evening.label")}</span>
+                    <span className={styles.chip}>{t("home.status.bonus")}</span>
+                </div>
+                <h2 className={styles.cardTitle}>{t("home.evening.title")}</h2>
+                <p className={styles.secondary}>{t("home.evening.hint")}</p>
+            </section>
+
+            <section className={styles.card}>
+                <span className={styles.eyebrow}>{t("home.review.label")}</span>
+                <h2 className={styles.cardTitleSmall}>{t("home.review.title")}</h2>
+                <button className={styles.buttonSecondary} type="button">
+                    {t("home.review.start")}
+                </button>
+            </section>
+
+            <p className={styles.footnote}>{t("home.goal")}</p>
+        </main>
+    );
 }
