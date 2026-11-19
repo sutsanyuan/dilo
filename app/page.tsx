@@ -31,8 +31,11 @@ export default async function Home() {
     return (
         <main className={styles.screen}>
             <header className={styles.header}>
-                <LanguageSwitcher current={locale} />
-                <p className={styles.date}>{today}</p>
+                <div className={styles.headerTop}>
+                    <p className={styles.date}>{today}</p>
+                    <LanguageSwitcher current={locale} />
+                </div>
+
                 <h1 className={`spanish ${styles.greeting}`}>Buenos días, Tsan</h1>
             </header>
 

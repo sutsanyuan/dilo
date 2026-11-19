@@ -1,0 +1,28 @@
+/* 外框：三個按鈕排成一列 */
+.switcher {
+    display: inline-flex;
+    gap: var(--space-4);
+}
+
+/* 每一顆按鈕 */
+.option {
+    padding: var(--space-4) var(--space-12);
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--color-ink-secondary);
+    font: inherit; /* 按鈕預設不會沿用網頁字體，要手動繼承 */
+    font-size: 13px;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--color-ink);
+    }
+}
+
+/* 目前選中的語言 */
+.option[aria-pressed="true"] {
+    background: var(--color-surface-muted);
+    color: var(--color-ink);
+    font-weight: 600;
+}
